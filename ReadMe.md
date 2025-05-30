@@ -1,3 +1,5 @@
+![Tests](https://github.com/PlatypusBytes/GoTrain/actions/workflows/go.yaml/badge.svg)
+
 # GoTrain
 
 A Go library for analyzing critical speeds in railway systems, focusing on soil and track dispersion analysis.
