@@ -1,4 +1,4 @@
-module GoTrain
+module github.com/PlatypusBytes/GoTrain
 
 go 1.24.3
 

@@ -1,8 +1,8 @@
 package main
 
 import (
-	ballast_dispersion "GoTrain/internal/track_dispersion"
-	"GoTrain/pkg/math_utils"
+	"github.com/PlatypusBytes/GoTrain/internal/track_dispersion"
+	"github.com/PlatypusBytes/GoTrain/pkg/math_utils"
 	"fmt"
 )
 

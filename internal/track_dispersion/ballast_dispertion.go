@@ -4,7 +4,7 @@ import (
     "fmt"
     "math"
     "gonum.org/v1/gonum/mat"
-    "GoTrain/pkg/math_utils"
+    "github.com/PlatypusBytes/GoTrain/pkg/math_utils"
 )
 
 
