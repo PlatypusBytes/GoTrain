@@ -5,16 +5,15 @@
 A Go library for analyzing critical speeds in railway systems, focusing on soil and track dispersion analysis.
 
 The methodology for the computation of the critical train speed is based on the work of [Mezher et al. (2016)](https://www.sciencedirect.com/science/article/abs/pii/S2214391215000239).
-The dispersion curve for the layered soil is based on the Fast Delta Matrix method proposed by [Buchen and Ben-Hador (1996)](https://academic.oup.com/gji/article-lookup/doi/10.1111/j.1365-246X.1996.tb05642.x).
-
+The dispersion curve for the layered soil is based on the Fast Delta Matrix method proposed by [Buchen and Ben-Hador (1996)](https://academic.oup.com/gji/article-lookup/doi/10.1111/j.1365-246X.1996.tb05642.x). (WIP)
 
 
 ## Building
 
-To build the critical speed utility:
+To build the critical speed library:
 
 ```bash
-go build -o bin/criticalspeed ./cmd/critical_speed
+go build -o bin/critical_speed ./cmd/critical_speed
 ```
 
 Or use the Makefile:
@@ -23,18 +22,50 @@ Or use the Makefile:
 make build
 ```
 
-## Running
+## Usage
 
-Execute the critical speed analysis tool:
+The critical speed utility requires a YAML configuration file for specifying track parameters:
 
 ```bash
-./bin/criticalspeed
+# Run with a configuration file (required)
+./bin/critical_speed -config /path/to/config.yaml
 ```
+
+### Configuration File Format
+
+Create a YAML file with the following structure:
+
+```yaml
+# Track type: can be "ballast" or "slabtrack"
+track_type: ballast
+
+# Frequency range configuration
+frequency:
+  min: 0.1
+  max: 250
+  points: 100
+
+# Ballast track parameters
+ballast_track:
+  ei_rail: 1.29e7        # Rail bending stiffness [N·m^2]
+  m_rail: 120            # Rail mass per unit length [kg/m]
+  k_rail_pad: 5e8        # Railpad stiffness [N/m]
+  # ... other parameters ...
+
+# Slab track parameters
+slab_track:
+  ei_rail: 1.29e7        # Rail bending stiffness [N·m^2]
+  m_rail: 120            # Rail mass per unit length [kg/m]
+  # ... other parameters ...
+
+# Output file configuration
+output:
+  file_name: "dispersion_results.json"
+```
+
+See the `configs/sample_config.yaml` for a complete example.
+
 
 ## License
 
-[Specify your license here]
-
-## Last Updated
-
-May 30, 2025
+This project is licensed under the BSD-3-Clause License. See the [LICENSE](LICENSE) file for details.
