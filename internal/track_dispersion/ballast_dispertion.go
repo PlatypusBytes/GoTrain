@@ -51,7 +51,7 @@ func ComputeDispersion(parameters BallastTrackParameters, omega []float64) []flo
 			return TrackStiffness(parameters, omegaVal, wavenumber)
 		}
 
-		wavenumber, err := math_utils.Brent(ini_wave_number, end_wave_number, 1e-9, brentAuxiliar)
+		wavenumber, err := math_utils.Brent(ini_wave_number, end_wave_number, brentAuxiliar)
 		if err != nil {
 			fmt.Println(err.Error())
 		} else {
@@ -60,7 +60,6 @@ func ComputeDispersion(parameters BallastTrackParameters, omega []float64) []flo
 		}
 	}
 	return phase_velocity
-
 }
 
 // TrackStiffness computes the determinant of the track-soil system stiffness matrix

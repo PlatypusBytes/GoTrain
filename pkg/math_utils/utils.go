@@ -11,17 +11,18 @@ import (
 // f must be continuous in [a, b], and f(a) and f(b) must have opposite signs,
 // indicating a root exists in the interval (by the intermediate value theorem).
 //
+// The tolerance for convergence is  based on machine epsilon.
+//
 // Parameters:
 //
 //	a, b  - interval bounds (must bracket a root, i.e., f(a)*f(b) < 0)
-//	tol   - desired tolerance for convergence
 //	f     - function for which the root is to be found
 //
 // Returns:
 //
 //	root  - the estimated root
 //	error - an error if convergence fails or inputs are invalid
-func Brent(a, b, tol float64, f func(float64) float64) (float64, error) {
+func Brent(a, b float64, f func(float64) float64) (float64, error) {
 	// Maximum number of iterations
 	max_nb_iterations := 10000
 
@@ -34,34 +35,33 @@ func Brent(a, b, tol float64, f func(float64) float64) (float64, error) {
 		return 0, fmt.Errorf("root not bracketed: f(a) and f(b) must have opposite signs")
 	}
 
-	// Ensure a is the endpoint where |f(a)| < |f(b)|, if not swap a and b
+	// If one of the endpoints is the root, return it immediately
+	if fa == 0 {
+		return a, nil
+	}
+	if fb == 0 {
+		return b, nil
+	}
+
+	// Make sure that b is the point with the smaller function value
 	if math.Abs(fa) < math.Abs(fb) {
 		a, b = b, a
 		fa, fb = fb, fa
 	}
 
 	// Initialize variables for the algorithm
-	c := a     // c is the previous value of b
+	c := a     // c is the point with the next-to-smallest function value
 	fc := fa   // fc is f(c)
-	d := a     // d is used for the inverse quadratic interpolation
-	e := b - a // e is the distance moved in the step before last
+	d := b - a // d is used for the step size
+	e := d     // e is the distance moved in the step before last
 
-	// Set a small tolerance based on machine epsilon if needed
-	eps := math.Nextafter(1.0, 2.0) - 1.0
-	if tol < eps {
-		tol = eps
-	}
+	// Set a small tolerance based on machine epsilon
+	tol := math.Nextafter(1.0, 2.0) - 1.0
 
 	// Main iteration loop
 	for iter := 0; iter < max_nb_iterations; iter++ {
-		// Ensure b is the best approximation so far
-		if math.Abs(fc) < math.Abs(fb) {
-			a, b, c = b, c, a
-			fa, fb, fc = fb, fc, fa
-		}
-
 		// Convergence check
-		delta := 2*eps*math.Abs(b) + tol
+		delta := 2*tol*math.Abs(b) + tol
 		m := 0.5 * (c - b)
 
 		// Check if we've converged

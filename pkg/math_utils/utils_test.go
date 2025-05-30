@@ -13,7 +13,7 @@ func TestBrentSimplePolynomial(t *testing.T) {
 	}
 
 	// Try to find the positive root near x = 2
-	root, err := Brent(1.0, 3.0, 1e-9, f)
+	root, err := Brent(1.0, 3.0, f)
 	if err != nil {
 		t.Fatalf("Brent failed: %v", err)
 	}
@@ -31,7 +31,7 @@ func TestBrentInvalidInterval(t *testing.T) {
 		return x*x + 1
 	}
 
-	_, err := Brent(-1.0, 1.0, 1e-9, f)
+	_, err := Brent(-1.0, 1.0, f)
 	if err == nil {
 		t.Error("Expected error for invalid interval, got nil")
 	}
@@ -44,7 +44,7 @@ func TestBrentConvergenceTolerance(t *testing.T) {
 	}
 
 	// sin(x) = 0 has a root at x = π (≈ 3.14159)
-	root, err := Brent(3.0, 4.0, 1e-12, f)
+	root, err := Brent(3.0, 4.0, f)
 	if err != nil {
 		t.Fatalf("Brent failed: %v", err)
 	}
@@ -52,6 +52,24 @@ func TestBrentConvergenceTolerance(t *testing.T) {
 	expected := math.Pi
 	if math.Abs(root-expected) > 1e-9 {
 		t.Errorf("Expected root near π, but got %f", root)
+	}
+}
+
+// TestBrentRootNearBoundary tests the Brent method on a function with a root near the search interval boundary
+// This is specifically for the edge case with x^3 - 0.001 = 0, which has a root at x = 0.1
+func TestBrentRootNearBoundary(t *testing.T) {
+	f := func(x float64) float64 {
+		return math.Pow(x, 3) - 0.001
+	}
+
+	root, err := Brent(0.01, 1.0, f)
+	if err != nil {
+		t.Fatalf("Brent failed: %v", err)
+	}
+
+	expected := 0.1 // The exact root is x = (0.001)^(1/3) ≈ 0.1
+	if math.Abs(root-expected) > 1e-9 {
+		t.Errorf("Expected root near %f, but got %f", expected, root)
 	}
 }
 
