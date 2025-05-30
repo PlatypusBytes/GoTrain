@@ -3,7 +3,9 @@
 package main
 
 import (
+    "encoding/json"
     "fmt"
+    "os"
 
     ballast_dispersion "github.com/PlatypusBytes/GoTrain/internal/track_dispersion"
     "github.com/PlatypusBytes/GoTrain/pkg/math_utils"
@@ -31,11 +33,30 @@ func main() {
     // Calculate the phase velocity dispersion curve for the ballasted track
     track := ballast_dispersion.ComputeDispersion(ballast_parameters, omega)
 
-    // Print track dispersion results (show first 5 and last 5 values)
-    // Phase velocity values indicate potential critical speeds at corresponding frequencies
-    fmt.Println("Track Dispersion Results (first 5 and last 5 values):")
-    fmt.Println("First 5 values:")
-    for i := 0; i < 5 && i < len(track); i++ {
-        fmt.Printf("Frequency %.2f rad/s: %v\n", omega[i], track[i])
+
+    // Write the results into a json file
+    type DispersionResults struct {
+        Omega         []float64 `json:"omega"`
+        PhaseVelocity []float64 `json:"phase_velocity"`
     }
+
+    results := DispersionResults{
+        Omega:         omega,
+        PhaseVelocity: track,
+    }
+
+    jsonData, err := json.MarshalIndent(results, "", "\t")
+    if err != nil {
+        fmt.Println("Error marshaling to JSON:", err)
+        return
+    }
+
+    // Write to file
+    err = os.WriteFile("track_dispersion_results.json", jsonData, 0644)
+    if err != nil {
+        fmt.Println("Error writing JSON to file:", err)
+        return
+    }
+
+    fmt.Println("Results written successfully to dispersion_results.json")
 }
