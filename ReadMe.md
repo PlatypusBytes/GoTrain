@@ -1,4 +1,7 @@
 ![Tests](https://github.com/PlatypusBytes/GoTrain/actions/workflows/go.yaml/badge.svg)
+[![Go Reference](https://pkg.go.dev/badge/github.com/PlatypusBytes/GoTrain.svg)](https://pkg.go.dev/github.com/PlatypusBytes/GoTrain)
+[![Go Report Card](https://goreportcard.com/badge/github.com/PlatypusBytes/GoTrain)](https://goreportcard.com/report/github.com/PlatypusBytes/GoTrain)
+
 
 # GoTrain
 
