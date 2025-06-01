@@ -1,10 +1,9 @@
 package soil_dispersion
 
 import (
-    "errors"
-    "math"
+	"errors"
+	"math"
 )
-
 
 type TrackDispersion interface {
 	Compute() float64
