@@ -24,21 +24,21 @@ type Config struct {
 		Points int     `yaml:"points"`
 	} `yaml:"frequency"`
 	BallastTrack struct {
-		EIRail        float64 `yaml:"ei_rail"`
+		EIRail        float64 `yaml:"EI_rail"`
 		MRail         float64 `yaml:"m_rail"`
 		KRailPad      float64 `yaml:"k_rail_pad"`
 		CRailPad      float64 `yaml:"c_rail_pad"`
 		MSleeper      float64 `yaml:"m_sleeper"`
-		EBallast      float64 `yaml:"e_ballast"`
+		EBallast      float64 `yaml:"E_ballast"`
 		HBallast      float64 `yaml:"h_ballast"`
 		WidthSleeper  float64 `yaml:"width_sleeper"`
 		RhoBallast    float64 `yaml:"rho_ballast"`
 		SoilStiffness float64 `yaml:"soil_stiffness"`
 	} `yaml:"ballast_track"`
 	SlabTrack struct {
-		EIRail        float64 `yaml:"ei_rail"`
+		EIRail        float64 `yaml:"EI_rail"`
 		MRail         float64 `yaml:"m_rail"`
-		EISlab        float64 `yaml:"ei_slab"`
+		EISlab        float64 `yaml:"EI_slab"`
 		MSlab         float64 `yaml:"m_slab"`
 		KRailPad      float64 `yaml:"k_rail_pad"`
 		CRailPad      float64 `yaml:"c_rail_pad"`
