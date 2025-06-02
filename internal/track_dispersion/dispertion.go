@@ -76,7 +76,7 @@ func RailTrackDispersion(parameters TrackParameters, omega []float64) []float64 
 			return parameters.CalculateStiffness(omegaVal, wavenumber)
 		}
 
-		wavenumber, err := math_utils.Brent(ini_wave_number, end_wave_number, brentAuxiliar)
+		wavenumber, err := math_utils.Brent(ini_wave_number, end_wave_number, 1e-12, brentAuxiliar)
 		if err != nil {
 			fmt.Println(err.Error())
 		} else {
