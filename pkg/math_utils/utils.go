@@ -22,9 +22,14 @@ import (
 //
 //	root  - the estimated root
 //	error - an error if convergence fails or inputs are invalid
-func Brent(a, b float64, f func(float64) float64) (float64, error) {
+func Brent(a, b, tol float64, f func(float64) float64) (float64, error) {
 	// Maximum number of iterations
-	max_nb_iterations := 10000
+	max_nb_iterations := 1000
+
+	eps := math.Nextafter(1.0, 2.0) - 1.0
+	if tol < eps {
+		tol = eps
+	}
 
 	// Function evaluations at interval endpoints
 	fa := f(a)
@@ -55,13 +60,10 @@ func Brent(a, b float64, f func(float64) float64) (float64, error) {
 	d := b - a // d is used for the step size
 	e := d     // e is the distance moved in the step before last
 
-	// Set a small tolerance based on machine epsilon
-	tol := math.Nextafter(1.0, 2.0) - 1.0
-
 	// Main iteration loop
 	for iter := 0; iter < max_nb_iterations; iter++ {
 		// Convergence check
-		delta := 2*tol*math.Abs(b) + tol
+		delta := 2*eps*math.Abs(b) + tol
 		m := 0.5 * (c - b)
 
 		// Check if we've converged

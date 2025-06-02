@@ -13,7 +13,7 @@ func TestBrentSimplePolynomial(t *testing.T) {
 	}
 
 	// Try to find the positive root near x = 2
-	root, err := Brent(1.0, 3.0, f)
+	root, err := Brent(1.0, 3.0, 1e-12, f)
 	if err != nil {
 		t.Fatalf("Brent failed: %v", err)
 	}
@@ -31,7 +31,7 @@ func TestBrentInvalidInterval(t *testing.T) {
 		return x*x + 1
 	}
 
-	_, err := Brent(-1.0, 1.0, f)
+	_, err := Brent(-1.0, 1.0, 1e-12, f)
 	if err == nil {
 		t.Error("Expected error for invalid interval, got nil")
 	}
@@ -44,7 +44,7 @@ func TestBrentConvergenceTolerance(t *testing.T) {
 	}
 
 	// sin(x) = 0 has a root at x = π (≈ 3.14159)
-	root, err := Brent(3.0, 4.0, f)
+	root, err := Brent(3.0, 4.0, 1e-12, f)
 	if err != nil {
 		t.Fatalf("Brent failed: %v", err)
 	}
@@ -62,7 +62,7 @@ func TestBrentRootNearBoundary(t *testing.T) {
 		return math.Pow(x, 3) - 0.001
 	}
 
-	root, err := Brent(0.01, 1.0, f)
+	root, err := Brent(0.01, 1.0, 1e-12, f)
 	if err != nil {
 		t.Fatalf("Brent failed: %v", err)
 	}
