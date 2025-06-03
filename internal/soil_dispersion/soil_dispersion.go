@@ -1,8 +1,6 @@
 package soil_dispersion
 
 import (
-	"errors"
-	"math"
 )
 
 type TrackDispersion interface {

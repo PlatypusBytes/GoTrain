@@ -1,8 +1,6 @@
-package soil_dispersion
+package critical_speed
 
 import (
-	"errors"
-	"math"
 )
 
 type TrackDispersion interface {
