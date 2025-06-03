@@ -11,7 +11,7 @@ import (
 	"path/filepath"
 
 	track_dispersion "github.com/PlatypusBytes/GoTrain/internal/track_dispersion"
-	"github.com/PlatypusBytes/GoTrain/pkg/math_utils"
+	"github.com/PlatypusBytes/GoTrain/pkg/utils"
 	"gopkg.in/yaml.v3"
 )
 

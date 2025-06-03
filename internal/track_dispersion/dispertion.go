@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"math"
 
-	"github.com/PlatypusBytes/GoTrain/pkg/math_utils"
+	"github.com/PlatypusBytes/GoTrain/pkg/utils"
 	"gonum.org/v1/gonum/mat"
 )
 
@@ -63,8 +63,6 @@ func (p SlabTrackParameters) CalculateStiffness(omega float64, wavenumber float6
 //   - An array of phase velocities [m/s] corresponding to each input angular frequency
 func RailTrackDispersion(parameters TrackParameters, omega []float64) []float64 {
 
-	// Convert angular frequency to Hz
-	// frequency := make([]float64, len(omega))
 	phase_velocity := make([]float64, len(omega))
 
 	ini_wave_number := 0.001
