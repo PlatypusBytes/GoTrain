@@ -1,8 +1,5 @@
 package critical_speed
 
-import (
-)
-
 type TrackDispersion interface {
 	Compute() float64
 }
