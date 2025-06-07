@@ -2,9 +2,9 @@ package track_dispersion
 
 import (
 	"encoding/json"
+	"github.com/PlatypusBytes/GoTrain/pkg/utils"
 	"os"
 	"testing"
-	"github.com/PlatypusBytes/GoTrain/pkg/utils"
 )
 
 // Test dispersion curve of the Ballasted track
@@ -47,7 +47,6 @@ func TestBallastTrack(t *testing.T) {
 	}
 
 }
-
 
 func TestSlabTrack(t *testing.T) {
 	// Define ballast track parameters
