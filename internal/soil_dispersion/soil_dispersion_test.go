@@ -1,11 +1,11 @@
 package soil_dispersion
 
 import (
-	"os"
-	"math"
-	"testing"
 	"encoding/json"
 	"github.com/PlatypusBytes/GoTrain/pkg/utils"
+	"math"
+	"os"
+	"testing"
 )
 
 // Test computation of the wave speed
@@ -49,7 +49,6 @@ func TestWaveSpeed(t *testing.T) {
 	}
 }
 
-
 // Test computation of the dispersion curve for a layered soil
 func TestDispersionSoil(t *testing.T) {
 
@@ -81,7 +80,7 @@ func TestDispersionSoil(t *testing.T) {
 	}
 
 	omega := math_utils.Linspace(0.1, 250, 100)
-	phase_velocity:= SoilDispersion(layers, omega)
+	phase_velocity := SoilDispersion(layers, omega)
 
 	// Read the expected results from a JSON file
 	expectedResults, _ := os.ReadFile("../../testdata/soil_dispersion.json")
@@ -104,6 +103,6 @@ func TestDispersionSoil(t *testing.T) {
 
 // DispersionResults defines the structure for storing calculation results
 type DispersionResults struct {
-	Omega         []float64 `json:"omega"`
+	Omega         []float64  `json:"omega"`
 	PhaseVelocity []*float64 `json:"phase_velocity"`
 }
