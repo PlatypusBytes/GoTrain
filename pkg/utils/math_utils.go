@@ -164,7 +164,7 @@ func Linspace(start, end float64, n int) []float64 {
 	result := make([]float64, n)
 	step := (end - start) / float64(n-1)
 
-	for i := 0; i < n; i++ {
+	for i := range n {
 		result[i] = start + float64(i)*step
 	}
 
@@ -174,4 +174,72 @@ func Linspace(start, end float64, n int) []float64 {
 	}
 
 	return result
+}
+
+// InterceptLines calculates the first intersection point of two lines defined by
+// their x-coordinates and y-coordinates.
+//
+// Parameters:
+//
+//	x   - x-coordinates of the line (must have at least two points)
+//	y1  - y-coordinates of the first line (must have at least two points)
+//	y2  - y-coordinates of the second line (must have at least two points)
+//
+// Returns:
+//
+//	interceptX - x-coordinate of the intersection point
+//	interceptY - y-coordinate of the intersection point
+//	error       - an error if the input is invalid or if the lines are parallel
+func InterceptLines(x []float64, y1 []float64, y2 []float64) (float64, float64, error) {
+
+	// Check that input arrays have at least two elements
+	if len(x) < 2 || len(y1) < 2 || len(y2) < 2 {
+		return 0, 0, fmt.Errorf("input arrays must have at least two elements")
+	}
+
+	// Check that arrays have the same length
+	if len(y1) != len(x) || len(y2) != len(x) {
+		return 0, 0, fmt.Errorf("all input arrays must have the same length")
+	}
+
+	// Variables to track if lines might be parallel
+	hasNonZeroDiff := false
+
+	// Find where the difference in y-values changes sign (intersection point)
+	for i := 1; i < len(x); i++ {
+		// Calculate differences between the lines at each point
+		diff1 := y1[i] - y2[i]
+		diff2 := y1[i-1] - y2[i-1]
+
+		// Check if lines are potentially not parallel
+		if diff1 != diff2 {
+			hasNonZeroDiff = true
+		}
+
+		// If sign change or one of the points is exactly on the other curve
+		if diff1*diff2 <= 0 {
+			// If exact match at current point
+			if diff1 == 0 {
+				return x[i], y1[i], nil
+			}
+			// If exact match at previous point
+			if diff2 == 0 {
+				return x[i-1], y1[i-1], nil
+			}
+
+			// Calculate the intersection point using linear interpolation
+			fraction := math.Abs(diff2) / (math.Abs(diff1) + math.Abs(diff2))
+			interceptX := x[i-1] + fraction*(x[i]-x[i-1])
+			interceptY := y1[i-1] + fraction*(y1[i]-y1[i-1])
+
+			return interceptX, interceptY, nil
+		}
+	}
+
+	//If lines are parallel
+	if !hasNonZeroDiff {
+		return 0, 0, fmt.Errorf("input arrays are parallel")
+	}
+
+	return 0, 0, fmt.Errorf("no intersection found")
 }

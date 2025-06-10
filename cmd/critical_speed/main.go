@@ -10,8 +10,9 @@ import (
 	"os"
 	"path/filepath"
 
+	soil_dispersion "github.com/PlatypusBytes/GoTrain/internal/soil_dispersion"
 	track_dispersion "github.com/PlatypusBytes/GoTrain/internal/track_dispersion"
-	"github.com/PlatypusBytes/GoTrain/pkg/utils"
+	math_utils "github.com/PlatypusBytes/GoTrain/pkg/utils"
 	"gopkg.in/yaml.v3"
 )
 
@@ -46,15 +47,27 @@ type Config struct {
 		CRailPad      float64 `yaml:"c_rail_pad"`     // Railpad damping [N·s/m]
 		SoilStiffness float64 `yaml:"soil_stiffness"` // Soil spring stiffness [N/m]
 	} `yaml:"slab_track"`
-	Output struct {
+	SoilLayers []SoilLayer `yaml:"soil_layers"` // Array of soil layers
+	Output     struct {
 		FileName string `yaml:"file_name"` // Name of the output JSON file
 	} `yaml:"output"`
 }
 
 // DispersionResults defines the structure for storing calculation results
 type DispersionResults struct {
-	Omega         []float64 `json:"omega"`
-	PhaseVelocity []float64 `json:"phase_velocity"`
+	Omega              []float64 `json:"omega"`
+	TrackPhaseVelocity []float64 `json:"track_phase_velocity"`
+	SoilPhaseVelocity  []float64 `json:"soil_phase_velocity"`
+	CriticalOmega      float64   `json:"critical_omega"`
+	CriticalVelocity   float64   `json:"critical_velocity"`
+}
+
+// SoilLayer defines the structure for a soil layer
+type SoilLayer struct {
+	Thickness    float64 `yaml:"thickness"`     // Thickness of the soil layer [m]
+	Density      float64 `yaml:"density"`       // Density of the soil layer [kg/m³]
+	YoungModulus float64 `yaml:"young_modulus"` // Young's modulus of the soil layer [Pa]
+	PoissonRatio float64 `yaml:"poisson_ratio"` // Poisson's ratio of the soil layer
 }
 
 // createBallastTrackParams creates ballast track parameters from config.
@@ -98,19 +111,49 @@ func createSlabTrackParams(config Config) track_dispersion.SlabTrackParameters {
 	}
 }
 
+// createSoilLayers converts the soil layers from the config to soil_dispersion.Layer format
+//
+// Parameters:
+//   - config: The configuration structure containing soil layer parameters
+//
+// Returns:
+//   - []soil_dispersion.Layer: A slice of soil_dispersion.Layer objects
+func createSoilLayers(config Config) []soil_dispersion.Layer {
+	layers := make([]soil_dispersion.Layer, len(config.SoilLayers))
+
+	for i, soilLayer := range config.SoilLayers {
+		layer := soil_dispersion.Layer{
+			Thickness:     soilLayer.Thickness,
+			Density:       soilLayer.Density,
+			YoungsModulus: soilLayer.YoungModulus,
+			PoissonRatio:  soilLayer.PoissonRatio,
+		}
+		layer.WaveSpeed() // Calculate wave speeds
+		layers[i] = layer
+	}
+
+	return layers
+}
+
 // saveResults saves the calculation results to a JSON file.
 //
 // Parameters:
 //   - omega: Array of angular frequencies [rad/s]
-//   - phaseVelocity: Array of phase velocities [m/s]
+//   - trackphaseVelocity: Array of phase velocities for the track [m/s]
+//   - soilPhaseVelocity: Array of phase velocities for the soil layers [m/s], can contain nil values
+//   - criticalOmega: Critical angular frequency [rad/s]
+//   - criticalSpeed: Critical train speed [m/s]
 //   - fileName: Path and name of the output JSON file
 //
 // The function creates directories as needed and writes the results
 // in a structured JSON format.
-func saveResults(omega []float64, phaseVelocity []float64, fileName string) {
+func saveResults(omega []float64, trackPhaseVelocity []float64, soilPhaseVelocity []float64, criticalOmega float64, criticalSpeed float64, fileName string) {
 	results := DispersionResults{
-		Omega:         omega,
-		PhaseVelocity: phaseVelocity,
+		Omega:              omega,
+		TrackPhaseVelocity: trackPhaseVelocity,
+		SoilPhaseVelocity:  soilPhaseVelocity,
+		CriticalOmega:      criticalOmega,
+		CriticalVelocity:   criticalSpeed,
 	}
 
 	jsonData, err := json.MarshalIndent(results, "", "\t")
@@ -206,10 +249,22 @@ func main() {
 		log.Fatalf("Invalid track type: %s. Supported types are 'ballast' or 'slabtrack'", config.TrackType)
 	}
 
-	// Calculate the dispersion curve
+	// Calculate the dispersion curve for the track
 	phaseVelocity := track_dispersion.RailTrackDispersion(params, omega)
 
+	// Process soil layers if provided
+	soilLayers := createSoilLayers(config)
+
+	// Calculate the dispersion curve for the soil layers
+	soilPhaseVelocity := soil_dispersion.SoilDispersion(soilLayers, omega)
+
+	// Compute the critical train speed
+	omegaCrit, phaseVelocityCrit, err := math_utils.InterceptLines(omega, phaseVelocity, soilPhaseVelocity)
+	if err != nil {
+		log.Fatalf("Error calculating critical speed: %v", err)
+	}
+
 	// Save results to file
-	saveResults(omega, phaseVelocity, config.Output.FileName)
+	saveResults(omega, phaseVelocity, soilPhaseVelocity, omegaCrit, phaseVelocityCrit, config.Output.FileName)
 	fmt.Printf("Results written successfully to %s\n", config.Output.FileName)
 }
