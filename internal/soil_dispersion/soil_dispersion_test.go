@@ -107,6 +107,6 @@ func TestDispersionSoil(t *testing.T) {
 
 // DispersionResults defines the structure for storing calculation results
 type DispersionResults struct {
-	Omega         []float64  `json:"omega"`
+	Omega         []float64 `json:"omega"`
 	PhaseVelocity []float64 `json:"phase_velocity"`
 }
