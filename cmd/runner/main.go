@@ -19,6 +19,10 @@ func main() {
 		if !d.IsDir() && strings.HasSuffix(d.Name(), ".yaml") {
 			fmt.Printf("Running config: %s\n", path)
 
+			// Ensure the binary is built before running
+			if _, err := os.Stat("./bin/critical_speed"); os.IsNotExist(err) {
+				log.Fatal("Binary 'critical_speed' not found in './bin/'. Please build the project first.")
+			}
 			cmd := exec.Command("./bin/critical_speed", "-config", path)
 			cmd.Stdout = os.Stdout
 			cmd.Stderr = os.Stderr
