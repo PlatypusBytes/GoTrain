@@ -24,8 +24,6 @@ func main() {
 				log.Fatal("Binary 'critical_speed' not found in './bin/'. Please build the project first.")
 			}
 			cmd := exec.Command("./bin/critical_speed", "-config", path)
-			cmd.Stdout = os.Stdout
-			cmd.Stderr = os.Stderr
 
 			if err := cmd.Run(); err != nil {
 				log.Printf("Failed on config %s: %v\n", path, err)
