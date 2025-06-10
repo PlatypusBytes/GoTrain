@@ -79,6 +79,10 @@ func TestDispersionSoil(t *testing.T) {
 		},
 	}
 
+	for i := range layers {
+		layers[i].WaveSpeed() // Calculate wave speeds
+	}
+
 	omega := math_utils.Linspace(0.1, 250, 100)
 	phase_velocity := SoilDispersion(layers, omega)
 
@@ -96,7 +100,7 @@ func TestDispersionSoil(t *testing.T) {
 			t.Errorf("Expected omega[%d] = %f, got %f", i, v, omega[i])
 		}
 		if expected.PhaseVelocity[i] != phase_velocity[i] {
-			t.Errorf("Expected phase_velocity[%d] = %f, got %f", i, *expected.PhaseVelocity[i], *phase_velocity[i])
+			t.Errorf("Expected phase_velocity[%d] = %f, got %f", i, expected.PhaseVelocity[i], phase_velocity[i])
 		}
 	}
 }
@@ -104,5 +108,5 @@ func TestDispersionSoil(t *testing.T) {
 // DispersionResults defines the structure for storing calculation results
 type DispersionResults struct {
 	Omega         []float64  `json:"omega"`
-	PhaseVelocity []*float64 `json:"phase_velocity"`
+	PhaseVelocity []float64 `json:"phase_velocity"`
 }
