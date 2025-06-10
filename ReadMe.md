@@ -44,31 +44,76 @@ track_type: ballast
 
 # Frequency range configuration
 frequency:
-  min: 0.1
-  max: 250
+  min: 1
+  max: 314
   points: 100
 
 # Ballast track parameters
 ballast_track:
-  ei_rail: 1.29e7        # Rail bending stiffness [N·m^2]
+  EI_rail: 1.29e7        # Rail bending stiffness [N·m^2]
   m_rail: 120            # Rail mass per unit length [kg/m]
   k_rail_pad: 5e8        # Railpad stiffness [N/m]
-  # ... other parameters ...
+  c_rail_pad: 2.5e5      # Railpad damping [N·s/m]
+  m_sleeper: 490         # Sleeper (distributed) mass [kg/m]
+  E_ballast: 130e6       # Young's modulus of ballast [Pa]
+  h_ballast: 0.35        # Ballast (layer) thickness [m]
+  width_sleeper: 1.25    # Half-track width [m]
+  rho_ballast: 1700      # Ballast density [kg/m^3]
+  soil_stiffness: 0.0    # Soil (spring) stiffness [N/m]
 
 # Slab track parameters
 slab_track:
-  ei_rail: 1.29e7        # Rail bending stiffness [N·m^2]
+  EI_rail: 1.29e7        # Rail bending stiffness [N·m^2]
   m_rail: 120            # Rail mass per unit length [kg/m]
-  # ... other parameters ...
+  EI_slab: 6.40625e8     # Slab bending stiffness [N·m^2] (calculated from 30e9 * (1.25 * 0.35^3 / 12))
+  m_slab: 1093.75        # Slab mass per unit length [kg/m] (calculated from 2500*1.25*0.35)
+  k_rail_pad: 5e8        # Railpad stiffness [N/m]
+  c_rail_pad: 2.5e5      # Railpad damping [N·s/m]
+  soil_stiffness: 0.0    # Soil (spring) stiffness [N/m]
+
+soil_layers:
+  - thickness: 5          # Thickness of the soil layer [m]
+    density: 1900         # Density of the soil layer [kg/m^3]
+    young_modulus: 50.66666e6    # Young  modulus of the soil layer [Pa]
+    poisson_ratio: 0.33333333    # Poisson's ratio of the soil layer
+  - thickness: 10         # Thickness of the second soil layer [m]
+    density: 1900         # Density of the second soil layer [kg/m^3]
+    young_modulus: 202.6666e6  # Young  modulus of the second soil layer [Pa]
+    poisson_ratio: 0.33333333    # Poisson's ratio of the second soil layer
+  - thickness: 15         # Thickness of the third soil layer [m]
+    density: 1900         # Density of the third soil layer [kg/m^3]
+    young_modulus: 456e6    # Young  modulus of the third soil layer [Pa]
+    poisson_ratio: 0.3    # Poisson's ratio of the third soil layer
+  - thickness: .inf       # Thickness of the fourth soil layer [m]
+    density: 1900         # Density of the fourth soil layer [kg/m^3]
+    young_modulus: 810.6666e6  # Young  modulus of the fourth soil layer [Pa]
+    poisson_ratio: 0.33333333    # Poisson's ratio of the fourth soil layer
 
 # Output file configuration
 output:
   file_name: "dispersion_results.json"
 ```
 
-See the `configs/sample_config.yaml` for a complete example.
+See the `configs/sample_config.yaml` for the complete example.
 
+### Results
+The output will be a JSON file containing the computed dispersion curves for the specified track type and soil layers, as well as the critical speed. These are the keys in the JSON file:
+
+```
+{
+	"omega": [
+    ...
+    ],
+  "track_phase_velocity": [
+    ...
+    ],
+  "soil_phase_velocity": [
+    ...
+    ],
+	"critical_omega": ...,
+	"critical_velocity": ...
+}
+```
 
 ## License
-
 This project is licensed under the BSD-3-Clause License. See the [LICENSE](LICENSE) file for details.
