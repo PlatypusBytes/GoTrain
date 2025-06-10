@@ -55,9 +55,11 @@ type Config struct {
 
 // DispersionResults defines the structure for storing calculation results
 type DispersionResults struct {
-	Omega              []float64  `json:"omega"`
-	TrackPhaseVelocity []float64  `json:"track_phase_velocity"`
-	SoilPhaseVelocity  []*float64 `json:"soil_phase_velocity"`
+	Omega              []float64 `json:"omega"`
+	TrackPhaseVelocity []float64 `json:"track_phase_velocity"`
+	SoilPhaseVelocity  []float64 `json:"soil_phase_velocity"`
+	CriticalOmega      float64   `json:"critical_omega"`
+	CriticalVelocity   float64   `json:"critical_velocity"`
 }
 
 // SoilLayer defines the structure for a soil layer
@@ -139,15 +141,19 @@ func createSoilLayers(config Config) []soil_dispersion.Layer {
 //   - omega: Array of angular frequencies [rad/s]
 //   - trackphaseVelocity: Array of phase velocities for the track [m/s]
 //   - soilPhaseVelocity: Array of phase velocities for the soil layers [m/s], can contain nil values
+//   - criticalOmega: Critical angular frequency [rad/s]
+//   - criticalSpeed: Critical train speed [m/s]
 //   - fileName: Path and name of the output JSON file
 //
 // The function creates directories as needed and writes the results
 // in a structured JSON format.
-func saveResults(omega []float64, trackPhaseVelocity []float64, soilPhaseVelocity []*float64, fileName string) {
+func saveResults(omega []float64, trackPhaseVelocity []float64, soilPhaseVelocity []float64, criticalOmega float64, criticalSpeed float64, fileName string) {
 	results := DispersionResults{
 		Omega:              omega,
 		TrackPhaseVelocity: trackPhaseVelocity,
 		SoilPhaseVelocity:  soilPhaseVelocity,
+		CriticalOmega:      criticalOmega,
+		CriticalVelocity:   criticalSpeed,
 	}
 
 	jsonData, err := json.MarshalIndent(results, "", "\t")
@@ -252,7 +258,13 @@ func main() {
 	// Calculate the dispersion curve for the soil layers
 	soilPhaseVelocity := soil_dispersion.SoilDispersion(soilLayers, omega)
 
+	// Compute the critical train speed
+	omegaCrit, phaseVelocityCrit, err := math_utils.InterceptLines(omega, phaseVelocity, soilPhaseVelocity)
+	if err != nil {
+		log.Fatalf("Error calculating critical speed: %v", err)
+	}
+
 	// Save results to file
-	saveResults(omega, phaseVelocity, soilPhaseVelocity, config.Output.FileName)
+	saveResults(omega, phaseVelocity, soilPhaseVelocity, omegaCrit, phaseVelocityCrit, config.Output.FileName)
 	fmt.Printf("Results written successfully to %s\n", config.Output.FileName)
 }

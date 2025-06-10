@@ -42,7 +42,7 @@ func (l *Layer) WaveSpeed() {
 //
 // Note: The function assumes that the layers have been initialized with their physical properties
 // (density, Young's modulus, Poisson's ratio, thickness) and that the WaveSpeed method
-func SoilDispersion(layers []Layer, omega []float64) []*float64 {
+func SoilDispersion(layers []Layer, omega []float64) []float64 {
 
 	// find the minimum & maximum compressional wave speed in layers
 	min_shear_wave_speed := math.Inf(1)
@@ -61,11 +61,11 @@ func SoilDispersion(layers []Layer, omega []float64) []*float64 {
 	c_list := math_utils.Linspace(c_min, c_max, 10000)
 
 	// Use pointers to allow null values in JSON
-	phase_speed := make([]*float64, len(omega))
+	phase_speed := make([]float64, len(omega))
 
 	for i := range omega {
-		// Initialize with nil (will be represented as null in JSON)
-		phase_speed[i] = nil
+		// Initialize with nan
+		phase_speed[i] = math.NaN()
 
 		d_1 := dispersionFastDelta(layers, omega[i], c_list[0])
 
@@ -74,7 +74,7 @@ func SoilDispersion(layers []Layer, omega []float64) []*float64 {
 			if d_1*d_2 < 0 {
 				// When solution is found, create a value and set it
 				value := (c_list[j-1] + c_list[j]) / 2
-				phase_speed[i] = &value
+				phase_speed[i] = value
 				break
 			}
 			d_1 = d_2
