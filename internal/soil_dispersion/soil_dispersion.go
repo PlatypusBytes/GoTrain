@@ -1,3 +1,11 @@
+// Package soil_dispersion provides tools to compute phase velocity dispersion curves
+// for soil profiles.
+//
+// The computation of the dispersion curve is based on the Fast Delta Matrix method:
+// Buchen, P. W., & Ben-Hador, R. (1996). "Free-mode surface-wave computations".
+// Geophysical Journal International, 124(3), 869–887. See also: https://doi.org/10.1111/j.1365-246X.1996.tb05642.x
+//
+// The layers are assumed to be horizontal and infinite, and the last layer is always assumed to be a halfspace.
 package soil_dispersion
 
 import (
@@ -32,6 +40,7 @@ func (l *Layer) WaveSpeed() {
 // in the provided omega array by iterating over a range of compressional wave speeds.
 // It returns a slice of pointers to float64, allowing for null values in the output.
 // The function uses a fast method to compute the dispersion relation for each frequency.
+//
 // Parameters:
 //   - layers: A slice of Layer structs representing the soil profile.
 //   - omega: A slice of angular frequencies [rad/s] at which to compute phase velocities.
@@ -60,7 +69,6 @@ func SoilDispersion(layers []Layer, omega []float64) []float64 {
 	c_max := 1.6 * max_shear_wave_speed
 	c_list := math_utils.Linspace(c_min, c_max, 10000)
 
-	// Use pointers to allow null values in JSON
 	phase_speed := make([]float64, len(omega))
 
 	for i := range omega {
@@ -89,6 +97,7 @@ func SoilDispersion(layers []Layer, omega []float64) []float64 {
 // of a matrix representing the track-soil system and returns the real part of the result.
 // This function is optimized for performance and uses complex arithmetic to handle
 // the wave propagation characteristics in the soil layers.
+// 
 // Parameters:
 //   - layers: A slice of Layer structs representing the soil profile.
 //   - omega: Angular frequency [rad/s] at which to compute the dispersion relation.

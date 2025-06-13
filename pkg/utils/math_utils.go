@@ -1,3 +1,13 @@
+// Package math_utils provides mathematical utility functions for numerical computations
+// used throughout the GoTrain project.
+//
+// The package implements various numerical methods including:
+//   - Root finding algorithms (Brent's method)
+//   - Linear space generator (similar to numpy's linspace)
+//   - Line intersection calculations
+//
+// These utilities support the core computational needs of the dispersion analysis
+// and other mathematical operations required for railway modeling.
 package math_utils
 
 import (
@@ -140,7 +150,7 @@ func Brent(a, b, tol float64, f func(float64) float64) (float64, error) {
 	return 0, fmt.Errorf("max iterations %d reached", max_nb_iterations)
 }
 
-// Linspace returns an array of n evenly spaced values over the interval [start, end].
+// Linspace returns an array of n-evenly spaced values over the interval [start, end].
 // This function mimics the behavior of numpy's linspace function.
 //
 // Parameters:

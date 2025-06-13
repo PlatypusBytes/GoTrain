@@ -1,3 +1,13 @@
+// Package track_dispersion provides tools to compute phase velocity dispersion curves
+// for railway track systems.
+//
+// The computation of the dispersion curve is based on the formulation:
+// Mezher et al. (2016). "Railway critical velocity - Analytical prediction and analysis".
+// Transportation Geotechnics, 6, 84–96.  See also: https://doi.org/10.1016/j.trgeo.2015.09.002
+//
+// It supports two types of track systems:
+//   - Ballast tracks, modeled with rail, sleeper, railpad, ballast and soil
+//   - Slab tracks, modeled with rail, slab, railpad, and soil
 package track_dispersion
 
 import (
@@ -13,9 +23,9 @@ type TrackParameters interface {
 	CalculateStiffness(omega float64, wavenumber float64) float64
 }
 
-// BallastTrackParameters holds the parameters for the ballast track dispersion model.
+// BallastTrackParameters holds the parameters for the ballast track model.
 // These parameters are used to define the physical properties of the railway track,
-// including rail, sleeper, railpad, ballast, and soil characteristics.
+// including rail, sleeper, railpad, ballast, and soil.
 type BallastTrackParameters struct {
 	EIRail        float64 // Rail bending stiffness [N·m^2].
 	MRail         float64 // Rail mass per unit length [kg/m].
@@ -34,9 +44,9 @@ func (p BallastTrackParameters) CalculateStiffness(omega float64, wavenumber flo
 	return BallastTrackStiffness(p, omega, wavenumber)
 }
 
-// SlabTrackParameters holds the parameters for the slab track dispersion model.
+// SlabTrackParameters holds the parameters for the slab track model.
 // These parameters define the physical properties of a slab track system,
-// including rail, slab, railpad, and soil characteristics.
+// including rail, slab, railpad, and soil.
 type SlabTrackParameters struct {
 	EIRail        float64 // Rail bending stiffness [N·m^2].
 	MRail         float64 // Rail mass per unit length [kg/m].
@@ -52,11 +62,10 @@ func (p SlabTrackParameters) CalculateStiffness(omega float64, wavenumber float6
 	return SlabTrackStiffness(p, omega, wavenumber)
 }
 
-// RailTrackDispersion calculates the phase velocity dispersion curve for a railway track
-// using a numerical root-finding approach (Brent's method).
+// RailTrackDispersion calculates the phase velocity dispersion curve for a railway track.
 //
 // Parameters:
-//   - parameters: Physical parameters of the track system (either BallastTrackParameters or SlabTrackParameters)
+//   - parameters: Physical parameters of the track system (BallastTrackParameters or SlabTrackParameters)
 //   - omega: Array of angular frequencies [rad/s] at which to compute phase velocities
 //
 // Returns:
@@ -143,7 +152,6 @@ func BallastTrackStiffness(parameters BallastTrackParameters, omega float64, wav
 // Returns:
 //   - Determinant of the stiffness matrix representing the track-soil system
 func SlabTrackStiffness(parameters SlabTrackParameters, omega float64, wavenumber float64) float64 {
-	// railpad complex stiffness
 	// rail_pad_complex_stiffness := complex(parameters.KRailPad, omega * parameters.CRailPad)
 	rail_pad_complex_stiffness := parameters.KRailPad
 
