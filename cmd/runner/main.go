@@ -1,3 +1,29 @@
+// Command runner is a batch processing tool for executing critical speed calculations
+// in parallel across multiple YAML configuration files. It invokes the critical_speed
+// binary for each configuration file and provides progress tracking and concurrency control.
+//
+// The tool performs the following:
+//   - Walks a directory recursively to discover all `.yaml` configuration files.
+//   - Spawns a configurable number of worker goroutines.
+//   - Each worker runs `critical_speed` with a given YAML file.
+//
+// Usage:
+//
+//	go run cmd/runner/main.go -dir path/to/configs -workers 4
+//
+// Or using the compiled binary:
+//
+//	./bin/runner -dir path/to/configs -workers 4
+//
+// Flags:
+//   -dir string
+//    	Required. Directory containing YAML configuration files.
+//   -workers int
+//    	Optional. Number of parallel workers (default: number of logical CPUs).
+//
+// Notes:
+//   - Ensure the critical_speed binary is already compiled and present at ./bin/critical_speed.
+//   - Files must have the `.yaml` extension and be properly formatted.
 package main
 
 import (
@@ -15,11 +41,69 @@ import (
 	"time"
 )
 
-// Job represents a single YAML file to process
+// Job represents a single YAML file to process by the critical_speed binary.
+// It encapsulates the path to the configuration file.
 type Job struct {
-	path string
+	path string // Path to the YAML configuration file
 }
 
+// worker processes jobs from the jobs channel concurrently.
+// It executes the critical_speed binary for each YAML configuration file
+// and tracks processing statistics.
+//
+// Parameters:
+//	id             - Worker identifier for logging purposes
+//	jobs           - Channel from which jobs are received
+//	wg             - WaitGroup for synchronization of worker completion
+//	processedCount - Atomic counter tracking the number of processed files
+func worker(id int, jobs <-chan Job, wg *sync.WaitGroup, processedCount *atomic.Int64) {
+	defer wg.Done()
+
+	for job := range jobs {
+		// Run the command for this YAML file
+		cmd := exec.Command("./bin/critical_speed", "-config", job.path)
+
+		if err := cmd.Run(); err != nil {
+			log.Printf("Worker %d: Failed on config %s: %v\n", id, job.path, err)
+		}
+
+		// Increment processed count
+		processedCount.Add(1)
+	}
+}
+
+// reportProgress prints the current processing progress with a visual progress bar.
+// It updates at regular intervals and terminates when processing is complete.
+//
+// Parameters:
+//	processed - Atomic counter tracking the number of processed files
+//	total     - Total number of files to process
+//	done      - Channel signaling when all processing is complete
+func reportProgress(processed *atomic.Int64, total int64, done <-chan struct{}) {
+	ticker := time.NewTicker(1 * time.Second)
+	defer ticker.Stop()
+
+	for {
+		select {
+		case <-ticker.C:
+			count := processed.Load()
+			percent := float64(count) / float64(total) * 100
+
+			// Create progress bar
+			width := 50
+			bar := strings.Repeat("=", int(float64(width)*float64(count)/float64(total)))
+			padding := strings.Repeat(" ", width-len(bar))
+
+			fmt.Printf("\r[%s%s] %.2f%% (%d/%d)", bar, padding, percent, count, total)
+		case <-done:
+			return
+		}
+	}
+}
+
+// main function to set up the runner for parallel processing of YAML configuration files.
+// It parses command-line flags, validates input, discovers YAML files, and
+// coordinates worker goroutines to process the files concurrently.
 func main() {
 	// Command line flags
 	configDirPtr := flag.String("dir", "", "Directory containing YAML files (required)")
@@ -52,7 +136,7 @@ func main() {
 	var totalFiles atomic.Int64
 
 	// Start workers
-	for i := 0; i < numWorkers; i++ {
+	for i := range numWorkers {
 		wg.Add(1)
 		go worker(i, jobs, &wg, &processedCount)
 	}
@@ -94,44 +178,4 @@ func main() {
 	close(done)
 
 	fmt.Printf("\nCompleted processing %d YAML files\n", processedCount.Load())
-}
-
-// worker processes jobs from the jobs channel
-func worker(id int, jobs <-chan Job, wg *sync.WaitGroup, processedCount *atomic.Int64) {
-	defer wg.Done()
-
-	for job := range jobs {
-		// Run the command for this YAML file
-		cmd := exec.Command("./bin/critical_speed", "-config", job.path)
-
-		if err := cmd.Run(); err != nil {
-			log.Printf("Worker %d: Failed on config %s: %v\n", id, job.path, err)
-		}
-
-		// Increment processed count
-		processedCount.Add(1)
-	}
-}
-
-// reportProgress prints the current progress
-func reportProgress(processed *atomic.Int64, total int64, done <-chan struct{}) {
-	ticker := time.NewTicker(1 * time.Second)
-	defer ticker.Stop()
-
-	for {
-		select {
-		case <-ticker.C:
-			count := processed.Load()
-			percent := float64(count) / float64(total) * 100
-
-			// Create progress bar
-			width := 50
-			bar := strings.Repeat("=", int(float64(width)*float64(count)/float64(total)))
-			padding := strings.Repeat(" ", width-len(bar))
-
-			fmt.Printf("\r[%s%s] %.2f%% (%d/%d)", bar, padding, percent, count, total)
-		case <-done:
-			return
-		}
-	}
 }
