@@ -8,35 +8,52 @@
 A Go library for analyzing critical speeds in railway systems, focusing on soil and track dispersion analysis.
 
 The methodology for the computation of the critical train speed is based on the work of [Mezher et al. (2016)](https://www.sciencedirect.com/science/article/abs/pii/S2214391215000239).
-The dispersion curve for the layered soil is based on the Fast Delta Matrix method proposed by [Buchen and Ben-Hador (1996)](https://academic.oup.com/gji/article-lookup/doi/10.1111/j.1365-246X.1996.tb05642.x). (WIP)
+The dispersion curve for the layered soil is based on the Fast Delta Matrix method proposed by [Buchen and Ben-Hador (1996)](https://academic.oup.com/gji/article-lookup/doi/10.1111/j.1365-246X.1996.tb05642.x).
 
 
 ## Building
 
-To build the critical speed library:
+To build the executables:
 
 ```bash
+# Build the critical_speed command
 go build -o bin/critical_speed ./cmd/critical_speed
+
+# Build the batch runner command
+go build -o bin/runner ./cmd/runner
 ```
 
-Or use the Makefile:
+## Commands
 
-```bash
-make build
-```
+GoTrain provides two main commands:
 
-## Usage
+### Critical Speed Calculator
 
-The critical speed utility requires a YAML configuration file for specifying track parameters:
+The `critical_speed` command calculates dispersion curves and critical speeds for a single configuration:
 
 ```bash
 # Run with a configuration file (required)
 ./bin/critical_speed -config /path/to/config.yaml
 ```
 
+### Batch Runner
+
+The `runner` command processes multiple configuration files in parallel:
+
+```bash
+# Run all YAML configs in a directory with 4 parallel workers
+./bin/runner -dir /path/to/configs -workers 4
+```
+
 ### Configuration File Format
 
-Create a YAML file with the following structure:
+The YAML configuration file defines track parameters and soil layers. The configuration file must specify:
+
+- Track type (ballast or slab track)
+- Frequency range for analysis
+- Track parameters (specific to track type)
+- Soil layer properties
+- Output file location
 
 ```yaml
 # Track type: can be "ballast" or "slabtrack"
@@ -99,7 +116,7 @@ See the `configs/sample_config.yaml` for the complete example.
 ### Results
 The output will be a JSON file containing the computed dispersion curves for the specified track type and soil layers, as well as the critical speed. These are the keys in the JSON file:
 
-```
+```json
 {
 	"omega": [
     ...
@@ -114,6 +131,21 @@ The output will be a JSON file containing the computed dispersion curves for the
 	"critical_velocity": ...
 }
 ```
+
+## Workflow
+
+A typical workflow using GoTrain involves:
+
+1. Create YAML configuration files for your track and soil conditions
+2. For a single analysis:
+   ```
+   ./bin/critical_speed -config configs/your_config.yaml
+   ```
+
+3. For batch processing of multiple configurations:
+   ```
+   ./bin/runner -dir ./yamls/dir -workers 8
+   ```
 
 ## License
 This project is licensed under the BSD-3-Clause License. See the [LICENSE](LICENSE) file for details.
