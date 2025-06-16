@@ -16,10 +16,11 @@
 //	./bin/runner -dir path/to/configs -workers 4
 //
 // Flags:
-//   -dir string
-//    	Required. Directory containing YAML configuration files.
-//   -workers int
-//    	Optional. Number of parallel workers (default: number of logical CPUs).
+//
+//	-dir string
+//	 	Required. Directory containing YAML configuration files.
+//	-workers int
+//	 	Optional. Number of parallel workers (default: number of logical CPUs).
 //
 // Notes:
 //   - Ensure the critical_speed binary is already compiled and present at ./bin/critical_speed.
@@ -52,6 +53,7 @@ type Job struct {
 // and tracks processing statistics.
 //
 // Parameters:
+//
 //	id             - Worker identifier for logging purposes
 //	jobs           - Channel from which jobs are received
 //	wg             - WaitGroup for synchronization of worker completion
@@ -76,6 +78,7 @@ func worker(id int, jobs <-chan Job, wg *sync.WaitGroup, processedCount *atomic.
 // It updates at regular intervals and terminates when processing is complete.
 //
 // Parameters:
+//
 //	processed - Atomic counter tracking the number of processed files
 //	total     - Total number of files to process
 //	done      - Channel signaling when all processing is complete

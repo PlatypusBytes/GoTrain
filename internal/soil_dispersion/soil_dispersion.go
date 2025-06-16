@@ -67,7 +67,7 @@ func SoilDispersion(layers []Layer, omega []float64) []float64 {
 
 	c_min := 0.6 * min_shear_wave_speed
 	c_max := 1.6 * max_shear_wave_speed
-	c_list := math_utils.Linspace(c_min, c_max, int((c_max - c_min) / 0.01))
+	c_list := math_utils.Linspace(c_min, c_max, int((c_max-c_min)/0.01))
 
 	phase_speed := make([]float64, len(omega))
 
