@@ -67,7 +67,7 @@ func SoilDispersion(layers []Layer, omega []float64) []float64 {
 
 	c_min := 0.6 * min_shear_wave_speed
 	c_max := 1.6 * max_shear_wave_speed
-	c_list := math_utils.Linspace(c_min, c_max, 10000)
+	c_list := math_utils.Linspace(c_min, c_max, int((c_max - c_min) / 0.01))
 
 	phase_speed := make([]float64, len(omega))
 
@@ -97,7 +97,7 @@ func SoilDispersion(layers []Layer, omega []float64) []float64 {
 // of a matrix representing the track-soil system and returns the real part of the result.
 // This function is optimized for performance and uses complex arithmetic to handle
 // the wave propagation characteristics in the soil layers.
-// 
+//
 // Parameters:
 //   - layers: A slice of Layer structs representing the soil profile.
 //   - omega: Angular frequency [rad/s] at which to compute the dispersion relation.
@@ -117,11 +117,11 @@ func dispersionFastDelta(layers []Layer, omega float64, c float64) float64 {
 
 	// Initialize X1 with complex values
 	X1 := []complex128{
-		complex(mu0*2*t_value, 0),
-		complex(mu0*-math.Pow(t_value, 2), 0),
+		complex(mu0*mu0*2*t_value, 0),
+		complex(mu0*mu0*-math.Pow(t_value, 2), 0),
 		complex(0, 0),
 		complex(0, 0),
-		complex(mu0*-4, 0),
+		complex(mu0*mu0*-4, 0),
 	}
 
 	// Compute the terms for the halfspace (last layer)

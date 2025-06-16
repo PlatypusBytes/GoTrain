@@ -67,15 +67,15 @@ frequency:
 
 # Ballast track parameters
 ballast_track:
-  EI_rail: 1.29e7        # Rail bending stiffness [N·m^2]
-  m_rail: 120            # Rail mass per unit length [kg/m]
-  k_rail_pad: 5e8        # Railpad stiffness [N/m]
+  EI_rail: 6.4e6         # Rail bending stiffness [N·m^2]
+  m_rail: 60.21          # Rail mass per unit length [kg/m]
+  k_rail_pad: 6e8        # Railpad stiffness [N/m]
   c_rail_pad: 2.5e5      # Railpad damping [N·s/m]
-  m_sleeper: 490         # Sleeper (distributed) mass [kg/m]
-  E_ballast: 130e6       # Young's modulus of ballast [Pa]
-  h_ballast: 0.35        # Ballast (layer) thickness [m]
+  m_sleeper: 238.5       # Sleeper (distributed) mass [kg/m]
+  E_ballast: 100e6       # Young's modulus of ballast [Pa]
+  h_ballast: 0.3         # Ballast (layer) thickness [m]
   width_sleeper: 1.25    # Half-track width [m]
-  rho_ballast: 1700      # Ballast density [kg/m^3]
+  rho_ballast: 2000      # Ballast density [kg/m^3]
   soil_stiffness: 0.0    # Soil (spring) stiffness [N/m]
 
 # Slab track parameters
