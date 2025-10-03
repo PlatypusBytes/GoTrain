@@ -37,6 +37,7 @@ import (
 	"flag"
 	"fmt"
 	"log"
+	"math"
 	"os"
 	"path/filepath"
 
@@ -85,11 +86,11 @@ type Config struct {
 
 // DispersionResults defines the structure for storing calculation results
 type DispersionResults struct {
-	Omega              []float64 `json:"omega"`
-	TrackPhaseVelocity []float64 `json:"track_phase_velocity"`
-	SoilPhaseVelocity  []float64 `json:"soil_phase_velocity"`
-	CriticalOmega      float64   `json:"critical_omega"`
-	CriticalVelocity   float64   `json:"critical_velocity"`
+	Omega              []float64     `json:"omega"`
+	TrackPhaseVelocity []float64     `json:"track_phase_velocity"`
+	SoilPhaseVelocity  []interface{} `json:"soil_phase_velocity"`
+	CriticalOmega      float64       `json:"critical_omega"`
+	CriticalVelocity   float64       `json:"critical_velocity"`
 }
 
 // SoilLayer defines the structure for a soil layer
@@ -178,10 +179,22 @@ func createSoilLayers(config Config) []soil_dispersion.Layer {
 // The function creates directories as needed and writes the results
 // in a structured JSON format.
 func saveResults(omega []float64, trackPhaseVelocity []float64, soilPhaseVelocity []float64, criticalOmega float64, criticalSpeed float64, fileName string) {
+
+	// Deal with math.NaN in soilPhaseVelocity
+	var safeValues []interface{}
+	for _, v := range soilPhaseVelocity {
+		if math.IsNaN(v) {
+			safeValues = append(safeValues, "NaN")
+		} else {
+			safeValues = append(safeValues, v)
+		}
+	}
+
+	// Prepare results struct
 	results := DispersionResults{
 		Omega:              omega,
 		TrackPhaseVelocity: trackPhaseVelocity,
-		SoilPhaseVelocity:  soilPhaseVelocity,
+		SoilPhaseVelocity:  safeValues,
 		CriticalOmega:      criticalOmega,
 		CriticalVelocity:   criticalSpeed,
 	}
