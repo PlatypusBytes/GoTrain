@@ -1,20 +1,10 @@
-// Package track_dispersion provides tools to compute phase velocity dispersion curves
-// for railway track systems.
-//
-// The computation of the dispersion curve is based on the formulation:
-// Mezher et al. (2016). "Railway critical velocity - Analytical prediction and analysis".
-// Transportation Geotechnics, 6, 84–96.  See also: https://doi.org/10.1016/j.trgeo.2015.09.002
-//
-// It supports two types of track systems:
-//   - Ballast tracks, modeled with rail, sleeper, railpad, ballast and soil
-//   - Slab tracks, modeled with rail, slab, railpad, and soil
 package track_dispersion
 
 import (
 	"fmt"
 	"math"
 
-	"github.com/PlatypusBytes/GoTrain/pkg/utils"
+	math_utils "github.com/PlatypusBytes/GoTrain/pkg/utils"
 	"gonum.org/v1/gonum/mat"
 )
 
