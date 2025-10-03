@@ -32,7 +32,7 @@ import (
 //
 //	root  - the estimated root
 //	error - an error if convergence fails or inputs are invalid
-func Brent(a, b, tol float64, f func(float64) float64) (float64, error) {
+func Brent(f func(float64) float64, a, b, tol float64) (float64, error) {
 	// Maximum number of iterations
 	max_nb_iterations := 1000
 

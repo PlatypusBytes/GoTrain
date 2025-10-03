@@ -10,6 +10,7 @@ package soil_dispersion
 
 import (
 	"math"
+	"math/cmplx"
 
 	math_utils "github.com/PlatypusBytes/GoTrain/pkg/utils"
 )
@@ -65,8 +66,8 @@ func SoilDispersion(layers []Layer, omega []float64) []float64 {
 		}
 	}
 
-	c_min := 0.6 * min_shear_wave_speed
-	c_max := 1.6 * max_shear_wave_speed
+	c_min := 0.5 * min_shear_wave_speed
+	c_max := max_shear_wave_speed
 	c_list := math_utils.Linspace(c_min, c_max, int((c_max-c_min)/0.01))
 
 	phase_speed := make([]float64, len(omega))
@@ -75,20 +76,17 @@ func SoilDispersion(layers []Layer, omega []float64) []float64 {
 		// Initialize with nan
 		phase_speed[i] = math.NaN()
 
-		d_1 := dispersionFastDelta(layers, omega[i], c_list[0])
-
-		for j := 1; j < len(c_list); j++ {
-			d_2 := dispersionFastDelta(layers, omega[i], c_list[j])
+		for j := range len(c_list) - 1 {
+			d_1 := dispersionFastDelta(layers, omega[i], c_list[j])
+			d_2 := dispersionFastDelta(layers, omega[i], c_list[j+1])
 			if d_1*d_2 < 0 {
 				// When solution is found, create a value and set it
 				value := (c_list[j-1] + c_list[j]) / 2
 				phase_speed[i] = value
 				break
 			}
-			d_1 = d_2
 		}
 	}
-
 	return phase_speed
 }
 
@@ -153,15 +151,15 @@ func dispersionFastDelta(layers []Layer, omega float64, c float64) float64 {
 		x5 := X1[4]
 
 		// Calculate intermediate values using complex math
-		p1 := complex(C_beta, 0)*x2 + complex(s, 0)*S_beta*x3
-		p2 := complex(C_beta, 0)*x4 + complex(s, 0)*S_beta*x5
-		p3 := complex(1/s, 0)*S_beta*x2 + complex(C_beta, 0)*x3
-		p4 := complex(1/s, 0)*S_beta*x4 + complex(C_beta, 0)*x5
+		p1 := C_beta*x2 + s*S_beta*x3
+		p2 := C_beta*x4 + s*S_beta*x5
+		p3 := 1/s*S_beta*x2 + C_beta*x3
+		p4 := 1/s*S_beta*x4 + C_beta*x5
 
-		q1 := complex(C_alpha, 0)*p1 - complex(r, 0)*S_alpha*p2
-		q2 := complex(-1/r, 0)*S_alpha*p3 + complex(C_alpha, 0)*p4
-		q3 := complex(C_alpha, 0)*p3 - complex(r, 0)*S_alpha*p4
-		q4 := complex(-1/r, 0)*S_alpha*p1 + complex(C_alpha, 0)*p2
+		q1 := C_alpha*p1 - r*S_alpha*p2
+		q2 := -1/r*S_alpha*p3 + C_alpha*p4
+		q3 := C_alpha*p3 - r*S_alpha*p4
+		q4 := -1/r*S_alpha*p1 + C_alpha*p2
 
 		y1 := complex(a_prime, 0)*x1 + complex(a, 0)*q1
 		y2 := complex(a, 0)*x1 + complex(a_prime, 0)*q2
@@ -179,8 +177,8 @@ func dispersionFastDelta(layers []Layer, omega float64, c float64) float64 {
 	}
 
 	// Calculate determinant using complex values
-	r_h_cmplx := complex(r_h, 0)
-	s_h_cmplx := complex(s_h, 0)
+	r_h_cmplx := r_h //complex(r_h, 0)
+	s_h_cmplx := s_h //complex(s_h, 0)
 	D := X1[1] + s_h_cmplx*X1[2] - r_h_cmplx*(X1[3]+s_h_cmplx*X1[4])
 
 	// Return the real part as the result
@@ -206,43 +204,23 @@ func dispersionFastDelta(layers []Layer, omega float64, c float64) float64 {
 //   - S_beta: Complex term for S-wave
 //   - r: Real term for P-wave
 //   - s: Real term for S-wave
-func computeTerms(c float64, wavenumber float64, thickness float64, compressionalWave float64, shearWaveSpeed float64) (float64, complex128, float64, complex128, float64, float64) {
+func computeTerms(c float64, wavenumber float64, thickness float64, compressionalWave float64, shearWaveSpeed float64) (complex128, complex128, complex128, complex128, complex128, complex128) {
 
-	var r, s float64
-	var C_alpha, C_beta float64
+	var r, s complex128
+	var C_alpha, C_beta complex128
 	var S_alpha, S_beta complex128
 
-	epsilon := 1e-200 // small value to avoid division by zero
+	r = cmplx.Sqrt(complex((1 - math.Pow(c/compressionalWave, 2)), 0))
+	s = cmplx.Sqrt(complex((1 - math.Pow(c/shearWaveSpeed, 2)), 0))
 
-	// P-wave terms
-	if c < compressionalWave {
-		r = math.Sqrt(1 - math.Pow(c/compressionalWave, 2))
-		C_alpha = math.Cosh(wavenumber * r * thickness)
-		S_alpha = complex(math.Sinh(wavenumber*r*thickness), 0)
-	} else if c == compressionalWave {
-		r = epsilon
-		C_alpha = math.Cosh(wavenumber * r * thickness)
-		S_alpha = complex(math.Sinh(wavenumber*r*thickness), 0)
-	} else {
-		r = math.Sqrt(math.Pow(c/compressionalWave, 2) - 1)
-		C_alpha = math.Cos(wavenumber * r * thickness)
-		S_alpha = complex(0, math.Sin(wavenumber*r*thickness))
-	}
+	complex_wavenb := complex(wavenumber, 0)
+	complex_thickness := complex(thickness, 0)
 
-	// S-wave terms
-	if c < shearWaveSpeed {
-		s = math.Sqrt(1 - math.Pow(c/shearWaveSpeed, 2))
-		C_beta = math.Cosh(wavenumber * s * thickness)
-		S_beta = complex(math.Sinh(wavenumber*s*thickness), 0)
-	} else if c == shearWaveSpeed {
-		s = epsilon
-		C_beta = math.Cosh(wavenumber * s * thickness)
-		S_beta = complex(math.Sinh(wavenumber*s*thickness), 0)
-	} else {
-		s = math.Sqrt(math.Pow(c/shearWaveSpeed, 2) - 1)
-		C_beta = math.Cos(wavenumber * s * thickness)
-		S_beta = complex(0, math.Sin(wavenumber*s*thickness))
-	}
+	C_alpha = cmplx.Cosh(complex_wavenb * r * complex_thickness)
+	S_alpha = cmplx.Sinh(complex_wavenb * r * complex_thickness)
+
+	C_beta = cmplx.Cosh(complex_wavenb * s * complex_thickness)
+	S_beta = cmplx.Sinh(complex_wavenb * s * complex_thickness)
 
 	return C_alpha, S_alpha, C_beta, S_beta, r, s
 }
