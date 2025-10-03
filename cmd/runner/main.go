@@ -23,7 +23,8 @@
 //	 	Optional. Number of parallel workers (default: number of logical CPUs).
 //
 // Notes:
-//   - Ensure the critical_speed binary is already compiled and present at ./bin/critical_speed.
+//   - Ensure the critical_speed binary is already compiled and present in ./bin/ directory.
+//     On Windows, this will be critical_speed.exe; on other platforms, critical_speed.
 //   - Files must have the `.yaml` extension and be properly formatted.
 package main
 
@@ -41,6 +42,15 @@ import (
 	"sync/atomic"
 	"time"
 )
+
+// getBinaryPath returns the appropriate binary path for the current platform.
+// On Windows, it appends .exe extension; on other platforms, it returns the path as-is.
+func getBinaryPath(basePath string) string {
+	if runtime.GOOS == "windows" {
+		return basePath + ".exe"
+	}
+	return basePath
+}
 
 // Job represents a single YAML file to process by the critical_speed binary.
 // It encapsulates the path to the configuration file.
@@ -63,7 +73,8 @@ func worker(id int, jobs <-chan Job, wg *sync.WaitGroup, processedCount *atomic.
 
 	for job := range jobs {
 		// Run the command for this YAML file
-		cmd := exec.Command("./bin/critical_speed", "-config", job.path)
+		binaryPath := getBinaryPath("./bin/critical_speed")
+		cmd := exec.Command(binaryPath, "-config", job.path)
 
 		if err := cmd.Run(); err != nil {
 			log.Printf("Worker %d: Failed on config %s: %v\n", id, job.path, err)
@@ -124,8 +135,9 @@ func main() {
 	fmt.Printf("Starting processing with %d workers\n", numWorkers)
 
 	// Ensure the binary is built before running
-	if _, err := os.Stat("./bin/critical_speed"); os.IsNotExist(err) {
-		log.Fatal("Binary 'critical_speed' not found in './bin/'. Please build the project first.")
+	binaryPath := getBinaryPath("./bin/critical_speed")
+	if _, err := os.Stat(binaryPath); os.IsNotExist(err) {
+		log.Fatalf("Binary '%s' not found. Please build the project first.", filepath.Base(binaryPath))
 	}
 
 	// Create job channel
