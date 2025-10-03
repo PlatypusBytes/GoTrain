@@ -112,7 +112,6 @@ func TestDispersionSoil_1(t *testing.T) {
 	}
 }
 
-
 // TestDispersionSoil validates the computation of dispersion curves for a layered soil system.
 // This test is based on the example from Mezher et al. (2016), Figure 15a.
 func TestDispersionSoil_2(t *testing.T) {
@@ -163,7 +162,6 @@ func TestDispersionSoil_2(t *testing.T) {
 		}
 	}
 }
-
 
 // DispersionResults defines the structure for storing dispersion curve calculation results.
 // It contains two arrays:
