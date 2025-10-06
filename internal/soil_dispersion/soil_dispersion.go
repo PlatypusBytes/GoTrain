@@ -19,8 +19,10 @@ type Layer struct {
 	ShearWaveSpeed         float64 // Shear wave speed [m/s]
 }
 
-// ComputeWaveSpeeds calculates the compressional and shear wave speeds
-// for Layer based on its Young's modulus, Poisson's ratio, and density.
+// WaveSpeed calculates the compressional and shear wave speeds for the Layer
+// based on its Young's modulus, Poisson's ratio, and density.
+// The calculated values are stored in the Layer's CompressionalWaveSpeed and
+// ShearWaveSpeed fields.
 func (l *Layer) WaveSpeed() {
 	shear_modulus := l.YoungsModulus / (2 * (1 + l.PoissonRatio))
 	p_modulus := l.YoungsModulus * (1 - l.PoissonRatio) / ((1 + l.PoissonRatio) * (1 - 2*l.PoissonRatio))
@@ -43,7 +45,8 @@ func (l *Layer) WaveSpeed() {
 //     for the respective frequency in omega. If no solution is found, the pointer will be nil.
 //
 // Note: The function assumes that the layers have been initialized with their physical properties
-// (density, Young's modulus, Poisson's ratio, thickness) and that the WaveSpeed method
+// (density, Young's modulus, Poisson's ratio, thickness) and that the WaveSpeed method has been
+// called to compute the wave speeds for each layer.
 func SoilDispersion(layers []Layer, omega []float64) []float64 {
 
 	// find the minimum & maximum compressional wave speed in layers
