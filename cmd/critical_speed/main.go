@@ -14,10 +14,10 @@
 package main
 
 import (
-    "flag"
-    "log"
+	"flag"
+	"log"
 
-    "github.com/PlatypusBytes/GoTrain/internal/critical_speed"
+	"github.com/PlatypusBytes/GoTrain/internal/critical_speed"
 )
 
 // main is the entry point for the critical speed analysis application.
@@ -30,14 +30,14 @@ import (
 // If the configuration file is not provided or if an error occurs during
 // execution, the program will terminate with a fatal error message.
 func main() {
-    configPath := flag.String("config", "", "Path to configuration YAML file (required)")
-    flag.Parse()
+	configPath := flag.String("config", "", "Path to configuration YAML file (required)")
+	flag.Parse()
 
-    if *configPath == "" {
-        log.Fatal("Error: You must provide a configuration file path using -config")
-    }
+	if *configPath == "" {
+		log.Fatal("Error: You must provide a configuration file path using -config")
+	}
 
-    if err := critical_speed.Run(*configPath); err != nil {
-        log.Fatal(err)
-    }
+	if err := critical_speed.Run(*configPath); err != nil {
+		log.Fatal(err)
+	}
 }

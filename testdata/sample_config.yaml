@@ -1,0 +1,53 @@
+# Track type: can be "ballast" or "slabtrack"
+track_type: ballast
+
+# Frequency range configuration
+frequency:
+  min: 1
+  max: 400
+  points: 100
+
+# Ballast track parameters
+ballast_track:
+  EI_rail: 6.4e6         # Rail bending stiffness [N·m^2]
+  m_rail: 60.21          # Rail mass per unit length [kg/m]
+  k_rail_pad: 6e8        # Railpad stiffness [N/m]
+  c_rail_pad: 2.5e5      # Railpad damping [N·s/m]
+  m_sleeper: 238.5       # Sleeper (distributed) mass [kg/m]
+  E_ballast: 100e6       # Young's modulus of ballast [Pa]
+  h_ballast: 0.3         # Ballast (layer) thickness [m]
+  width_sleeper: 1.25    # Half-track width [m]
+  rho_ballast: 2000      # Ballast density [kg/m^3]
+  soil_stiffness: 0.0    # Soil (spring) stiffness [N/m]
+
+# Slab track parameters
+slab_track:
+  EI_rail: 1.29e7        # Rail bending stiffness [N·m^2]
+  m_rail: 120            # Rail mass per unit length [kg/m]
+  EI_slab: 6.40625e8     # Slab bending stiffness [N·m^2] (calculated from 30e9 * (1.25 * 0.35^3 / 12))
+  m_slab: 1093.75        # Slab mass per unit length [kg/m] (calculated from 2500*1.25*0.35)
+  k_rail_pad: 5e8        # Railpad stiffness [N/m]
+  c_rail_pad: 2.5e5      # Railpad damping [N·s/m]
+  soil_stiffness: 0.0    # Soil (spring) stiffness [N/m]
+
+soil_layers:
+  - thickness: 5          # Thickness of the soil layer [m]
+    density: 1900         # Density of the soil layer [kg/m^3]
+    young_modulus: 2.67e7 # Young  modulus of the soil layer [Pa]
+    poisson_ratio: 0.33   # Poisson's ratio of the soil layer
+  - thickness: 10         # Thickness of the second soil layer [m]
+    density: 1900         # Density of the second soil layer [kg/m^3]
+    young_modulus: 1.14e8 # Young  modulus of the second soil layer [Pa]
+    poisson_ratio: 0.33   # Poisson's ratio of the second soil layer
+  - thickness: 15         # Thickness of the third soil layer [m]
+    density: 1900         # Density of the third soil layer [kg/m^3]
+    young_modulus: 2.63e8 # Young  modulus of the third soil layer [Pa]
+    poisson_ratio: 0.33   # Poisson's ratio of the third soil layer
+  - thickness: .inf       # Thickness of the fourth soil layer [m]
+    density: 1900         # Density of the fourth soil layer [kg/m^3]
+    young_modulus: 4.71e8 # Young  modulus of the fourth soil layer [Pa]
+    poisson_ratio: 0.33   # Poisson's ratio of the fourth soil layer
+
+# Output file configuration
+output:
+  file_name: "dispersion_results.json"
