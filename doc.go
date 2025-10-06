@@ -71,7 +71,7 @@
 // Analyzes a single railway configuration and computes dispersion curves and critical speed.
 //
 //	# Single configuration analysis
-//	./bin/critical_speed -config configs/sample_config.yaml
+//	./critical_speed -config configs/sample_config.yaml
 //
 // The output is a JSON file containing omega values, track phase velocities, soil phase
 // velocities, critical omega, and critical velocity.
@@ -82,7 +82,7 @@
 // Automatically discovers all .yaml files in a directory tree and processes them concurrently.
 //
 //	# Process multiple configurations with 4 workers
-//	./bin/runner -dir testdata/batch -workers 4
+//	./runner -dir testdata/batch -workers 4
 //
 // The runner displays a real-time progress bar and processes files concurrently for
 // maximum throughput.
