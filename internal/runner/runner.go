@@ -30,6 +30,7 @@ package runner
 
 import (
 	"fmt"
+	critical_speed "github.com/PlatypusBytes/GoTrain/internal/critical_speed"
 	"io/fs"
 	"log"
 	"path/filepath"
@@ -37,7 +38,6 @@ import (
 	"sync"
 	"sync/atomic"
 	"time"
-	critical_speed "github.com/PlatypusBytes/GoTrain/internal/critical_speed"
 )
 
 // Job represents a single YAML file to process by the critical_speed binary.

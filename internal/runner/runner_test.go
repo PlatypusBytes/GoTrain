@@ -10,7 +10,6 @@ import (
 
 const TOL = 1e-3
 
-
 // Test that if there are no YAML files, Run returns an appropriate error.
 func TestRunWithNoYamls(t *testing.T) {
 
@@ -38,9 +37,9 @@ func TestRunWithYamls(t *testing.T) {
 	}
 
 	var expectedResults = map[int]expectedResult{
-		0: {criticalOmega: 47.209851556707314,criticalSpeed: 54.97135460046886},
-		1: {criticalOmega: 47.217618003722116,criticalSpeed: 54.975836706978974},
-		2: {criticalOmega: 47.215617196350564,criticalSpeed: 54.974682017874876},
+		0: {criticalOmega: 47.209851556707314, criticalSpeed: 54.97135460046886},
+		1: {criticalOmega: 47.217618003722116, criticalSpeed: 54.975836706978974},
+		2: {criticalOmega: 47.215617196350564, criticalSpeed: 54.974682017874876},
 		3: {criticalOmega: 47.21551917331569, criticalSpeed: 54.97462544764632},
 		4: {criticalOmega: 47.20975344897503, criticalSpeed: 54.971297981360436},
 		5: {criticalOmega: 55.09280906583642, criticalSpeed: 59.34618814480292},
@@ -83,7 +82,6 @@ func TestRunWithYamls(t *testing.T) {
 			} else if diff := omega - expected.criticalOmega; diff < -TOL || diff > TOL {
 				t.Errorf("unexpected critical_omega: got %v, want %v (tolerance %v)", omega, expected.criticalOmega, TOL)
 			}
-
 
 			// cleanup
 			jsonPath := "tests/dispersion_results_" + strconv.Itoa(i) + ".json"
