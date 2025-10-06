@@ -139,8 +139,8 @@ func createSoilLayers(config Config) []soil_dispersion.Layer {
 //
 // Parameters:
 //   - omega: Array of angular frequencies [rad/s]
-//   - trackphaseVelocity: Array of phase velocities for the track [m/s]
-//   - soilPhaseVelocity: Array of phase velocities for the soil layers [m/s], can contain nil values
+//   - trackPhaseVelocity: Array of phase velocities for the track [m/s]
+//   - soilPhaseVelocity: Array of phase velocities for the soil layers [m/s], can contain NaN values
 //   - criticalOmega: Critical angular frequency [rad/s]
 //   - criticalSpeed: Critical train speed [m/s]
 //   - fileName: Path and name of the output JSON file
@@ -218,18 +218,13 @@ func loadConfig(configPath string) (Config, error) {
 	return config, nil
 }
 
-// main executes the critical speed analysis for a railway track based on configuration.
+// Run executes the critical speed analysis for a railway track based on configuration.
 // The function:
-//   - Processes command-line flags for configuration path
 //   - Loads the track parameters from a YAML configuration file
 //   - Computes dispersion curves for either ballast or slab track
-//   - Computes dispersion curve for the soil layered system (ToDo)
-//   - Compute the critical train speed (ToDo)
+//   - Computes dispersion curve for the soil layered system
+//   - Computes the critical train speed
 //   - Saves the results to a JSON file
-//
-// Command-line flags:
-//
-//	-config: Path to YAML configuration file (required)
 //
 // Parameters:
 //   - configPath: Path to the YAML configuration file

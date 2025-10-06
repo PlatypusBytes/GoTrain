@@ -1,36 +1,7 @@
-// Runner is a package for executing critical speed calculations in parallel across multiple YAML
-// configuration files. It invokes the critical_speed  binary for each configuration file and
-// provides progress tracking and concurrency control.
-//
-// The tool performs the following:
-//   - Walks a directory recursively to discover all `.yaml` configuration files.
-//   - Spawns a configurable number of worker goroutines.
-//   - Each worker runs `critical_speed` with a given YAML file.
-//
-// Usage:
-//
-//	go run cmd/runner/main.go -dir path/to/configs -workers 4
-//
-// Or using the compiled binary:
-//
-//	./bin/runner -dir path/to/configs -workers 4
-//
-// Flags:
-//
-//	-dir string
-//	 	Required. Directory containing YAML configuration files.
-//	-workers int
-//	 	Optional. Number of parallel workers (default: number of logical CPUs).
-//
-// Notes:
-//   - Ensure the critical_speed binary is already compiled and present in ./bin/ directory.
-//     On Windows, this will be critical_speed.exe; on other platforms, critical_speed.
-//   - Files must have the `.yaml` extension and be properly formatted.
 package runner
 
 import (
 	"fmt"
-	critical_speed "github.com/PlatypusBytes/GoTrain/internal/critical_speed"
 	"io/fs"
 	"log"
 	"path/filepath"
@@ -38,11 +9,14 @@ import (
 	"sync"
 	"sync/atomic"
 	"time"
+
+	critical_speed "github.com/PlatypusBytes/GoTrain/internal/critical_speed"
 )
 
-// Job represents a single YAML file to process by the critical_speed binary.
+// Job represents a single YAML configuration file to be processed.
+// It contains the file path that will be passed to the critical_speed analyzer.
 type Job struct {
-	path string
+	path string // Path to the YAML configuration file
 }
 
 // worker processes jobs from the jobs channel concurrently.
@@ -80,7 +54,15 @@ func reportProgress(processed *atomic.Int64, total int64, done <-chan struct{}) 
 	}
 }
 
-// Run sets up the runner for parallel processing of YAML configuration files.
+// Run orchestrates parallel processing of YAML configuration files in the specified directory.
+// It spawns numWorkers goroutines to process files concurrently and displays a progress bar.
+//
+// Parameters:
+//   - configDir: Directory path to search for YAML configuration files (searched recursively)
+//   - numWorkers: Number of concurrent workers to spawn for parallel processing
+//
+// Returns:
+//   - error: An error if directory traversal fails or no YAML files are found
 func Run(configDir string, numWorkers int) error {
 
 	// Create job channel
