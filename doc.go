@@ -1,4 +1,4 @@
-// Package gotrain is a Go library for analyzing critical speeds in railway systems,
+// Package GoTrain is a Go library for analyzing critical speeds in railway systems,
 // focusing on soil and track dispersion analysis.
 //
 // This project is based on TrainCritSpeed (https://github.com/PlatypusBytes/TrainCritSpeed),
@@ -6,7 +6,7 @@
 // improved performance and concurrency features.
 //
 // The main difference with TrainCritSpeed is that GoTrain only computes the fundamental
-// mode for the subsurface and GoTrain does not make the dispersion field plot. If you
+// mode for the soil layers and GoTrain does not make the dispersion field plot. If you
 // wish to use these features, please use TrainCritSpeed.
 //
 // # Methodology
@@ -30,14 +30,6 @@
 //
 // Batch Runner (cmd/runner): Processes multiple configuration files in parallel with
 // configurable worker pools.
-//
-// # Package Structure
-//
-// The library is organized into the following packages:
-//
-//   - internal/soil_dispersion: Computes phase velocity dispersion curves for soil profiles
-//   - internal/track_dispersion: Computes phase velocity dispersion curves for railway track systems
-//   - pkg/utils: Mathematical utility functions for numerical computations
 //
 // # Example Usage
 //
