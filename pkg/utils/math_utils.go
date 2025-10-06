@@ -1,13 +1,3 @@
-// Package math_utils provides mathematical utility functions for numerical computations
-// used throughout the GoTrain project.
-//
-// The package implements various numerical methods including:
-//   - Root finding algorithms (Brent's method)
-//   - Linear space generator (similar to numpy's linspace)
-//   - Line intersection calculations
-//
-// These utilities support the core computational needs of the dispersion analysis
-// and other mathematical operations required for railway modeling.
 package math_utils
 
 import (

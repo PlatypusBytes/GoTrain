@@ -1,11 +1,3 @@
-// Package soil_dispersion provides tools to compute phase velocity dispersion curves
-// for soil profiles.
-//
-// The computation of the dispersion curve is based on the Fast Delta Matrix method:
-// Buchen, P. W., & Ben-Hador, R. (1996). "Free-mode surface-wave computations".
-// Geophysical Journal International, 124(3), 869–887. See also: https://doi.org/10.1111/j.1365-246X.1996.tb05642.x
-//
-// The layers are assumed to be horizontal and infinite, and the last layer is always assumed to be a halfspace.
 package soil_dispersion
 
 import (
