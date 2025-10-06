@@ -32,28 +32,13 @@ import (
 	"fmt"
 	"io/fs"
 	"log"
-	"os"
-	"os/exec"
 	"path/filepath"
-	"runtime"
 	"strings"
 	"sync"
 	"sync/atomic"
 	"time"
+	critical_speed "github.com/PlatypusBytes/GoTrain/internal/critical_speed"
 )
-
-// BinaryPath points to the critical_speed binary.
-// By default it is ./bin/critical_speed (with .exe on Windows).
-// Tests can override this.
-var BinaryPath = getBinaryPath("./bin/critical_speed")
-
-// getBinaryPath returns the appropriate binary path for the current platform.
-func getBinaryPath(basePath string) string {
-	if runtime.GOOS == "windows" {
-		return basePath + ".exe"
-	}
-	return basePath
-}
 
 // Job represents a single YAML file to process by the critical_speed binary.
 type Job struct {
@@ -65,9 +50,9 @@ func worker(id int, jobs <-chan Job, wg *sync.WaitGroup, processedCount *atomic.
 	defer wg.Done()
 
 	for job := range jobs {
-		cmd := exec.Command(BinaryPath, "-config", job.path)
 
-		if err := cmd.Run(); err != nil {
+		// Execute the critical_speed with the YAML file
+		if err := critical_speed.Run(job.path); err != nil {
 			log.Printf("Worker %d: Failed on config %s: %v\n", id, job.path, err)
 		}
 
@@ -97,10 +82,6 @@ func reportProgress(processed *atomic.Int64, total int64, done <-chan struct{}) 
 
 // Run sets up the runner for parallel processing of YAML configuration files.
 func Run(configDir string, numWorkers int) error {
-	// Ensure the binary exists before running
-	if _, err := os.Stat(BinaryPath); os.IsNotExist(err) {
-		return fmt.Errorf("binary '%s' not found", filepath.Base(BinaryPath))
-	}
 
 	// Create job channel
 	jobs := make(chan Job, 100)
