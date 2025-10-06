@@ -37,16 +37,16 @@ func TestRunWithYamls(t *testing.T) {
 	}
 
 	var expectedResults = map[int]expectedResult{
-		0: {criticalOmega: 47.209851556707314, criticalSpeed: 54.97135460046886},
-		1: {criticalOmega: 47.217618003722116, criticalSpeed: 54.975836706978974},
-		2: {criticalOmega: 47.215617196350564, criticalSpeed: 54.974682017874876},
-		3: {criticalOmega: 47.21551917331569, criticalSpeed: 54.97462544764632},
-		4: {criticalOmega: 47.20975344897503, criticalSpeed: 54.971297981360436},
-		5: {criticalOmega: 55.09280906583642, criticalSpeed: 59.34618814480292},
-		6: {criticalOmega: 55.09280906583642, criticalSpeed: 59.34618814480292},
-		7: {criticalOmega: 55.09255139144127, criticalSpeed: 59.34605118652724},
-		8: {criticalOmega: 52.55226570820066, criticalSpeed: 57.977738890313006},
-		9: {criticalOmega: 52.55270206278452, criticalSpeed: 57.97798020782377},
+		0: {criticalOmega: 47.2099, criticalSpeed: 54.9714},
+		1: {criticalOmega: 47.2176, criticalSpeed: 54.9758},
+		2: {criticalOmega: 47.2156, criticalSpeed: 54.9747},
+		3: {criticalOmega: 47.2155, criticalSpeed: 54.9746},
+		4: {criticalOmega: 47.2098, criticalSpeed: 54.9713},
+		5: {criticalOmega: 55.0928, criticalSpeed: 59.3462},
+		6: {criticalOmega: 55.0928, criticalSpeed: 59.3462},
+		7: {criticalOmega: 55.0926, criticalSpeed: 59.3461},
+		8: {criticalOmega: 52.5523, criticalSpeed: 57.9777},
+		9: {criticalOmega: 52.5527, criticalSpeed: 57.978},
 	}
 
 	// Check for expected output files
