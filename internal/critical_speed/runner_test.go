@@ -9,11 +9,12 @@ import (
 
 const TOL = 1e-3
 
+// Test the computation of critical speed using a sample configuration file.
+// This is an integration test that compares the output against expected values.
 func TestRunWithSampleConfig(t *testing.T) {
 	tmpFile := filepath.Join("dispersion_results.json")
 	configPath := "../../testdata/sample_config.yaml"
 
-	// copy or create a minimal YAML config for testing
 	err := Run(configPath)
 	if err != nil {
 		t.Fatalf("Run failed: %v", err)
