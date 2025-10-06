@@ -159,11 +159,6 @@
 //	cd GoTrain
 //	make build
 //
-// Or build manually:
-//
-//	go build -o bin/critical_speed ./cmd/critical_speed
-//	go build -o bin/runner ./cmd/runner
-//
 // # References
 //
 // For more detailed information:

@@ -87,22 +87,11 @@ GoTrain/
 
 Download the latest release for your platform from the [GitHub Releases page](https://github.com/PlatypusBytes/GoTrain/releases).
 
+You can download `critical_speed` (single configuration calculator) and `runner` (batch processor) directly.
+
 **Available platforms:**
 - Linux (amd64)
 - Windows (amd64)
-
-**Installation steps:**
-
-```bash
-# Example for Linux amd64
-wget https://github.com/PlatypusBytes/GoTrain/releases/latest/download/gotrain-linux-amd64.tar.gz
-tar -xzf gotrain-linux-amd64.tar.gz
-cd gotrain
-
-# The executables are ready to use
-./critical_speed -config configs/sample_config.yaml
-./runner -dir testdata/batch -workers 4
-```
 
 ### Option 2: Build from Source
 
@@ -122,7 +111,7 @@ make build
 ```
 
 This creates two executables in the `bin/` directory:
-- `bin/critical_speed` - Single configuration analyzer
+- `bin/critical_speed` - Single configuration calculator
 - `bin/runner` - Batch processor for multiple configurations
 
 ## Commands
@@ -299,7 +288,7 @@ Results are saved as JSON files with the following structure:
 
 ## Contributing
 
-Contributions are welcome! Please feel free to submit a Pull Request.
+Contributions are welcome! Please feel free to create a Fork and submit a Pull Request.
 
 ## Authors
 
@@ -312,6 +301,6 @@ This project is licensed under the BSD-3-Clause License. See the [LICENSE](LICEN
 
 ## Project Links
 
-- 🌐 GitHub Repository: [https://github.com/PlatypusBytes/GoTrain](https://github.com/PlatypusBytes/GoTrain)
-- 📚 Package Documentation: [https://pkg.go.dev/github.com/PlatypusBytes/GoTrain](https://pkg.go.dev/github.com/PlatypusBytes/GoTrain)
-- 🐍 Original Python Version: [TrainCritSpeed](https://github.com/PlatypusBytes/TrainCritSpeed)
+- GitHub Repository: [https://github.com/PlatypusBytes/GoTrain](https://github.com/PlatypusBytes/GoTrain)
+- Package Documentation: [https://pkg.go.dev/github.com/PlatypusBytes/GoTrain](https://pkg.go.dev/github.com/PlatypusBytes/GoTrain)
+- Original Python Version: [TrainCritSpeed](https://github.com/PlatypusBytes/TrainCritSpeed)
