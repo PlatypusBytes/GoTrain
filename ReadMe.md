@@ -87,6 +87,8 @@ GoTrain/
 
 Download the latest release for your platform from the [GitHub Releases page](https://github.com/PlatypusBytes/GoTrain/releases).
 
+You can download `critical_speed` (single configuration calculator) and `runner` (batch processor) directly.
+
 **Available platforms:**
 - Linux (amd64)
 - Windows (amd64)
@@ -109,7 +111,7 @@ make build
 ```
 
 This creates two executables in the `bin/` directory:
-- `bin/critical_speed` - Single configuration analyzer
+- `bin/critical_speed` - Single configuration calculator
 - `bin/runner` - Batch processor for multiple configurations
 
 ## Commands
@@ -286,7 +288,7 @@ Results are saved as JSON files with the following structure:
 
 ## Contributing
 
-Contributions are welcome! Please feel free to submit a Pull Request.
+Contributions are welcome! Please feel free to create a Fork and submit a Pull Request.
 
 ## Authors
 
