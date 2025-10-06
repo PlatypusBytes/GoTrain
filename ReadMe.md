@@ -1,4 +1,4 @@
-![Tests](https://github.com/PlatypusBytes/GoTrain/actions/workflows/go.yaml/badge.svg)
+![Tests](https://github.com/PlatypusBytes/GoTrain/actions/workflows/tests.yaml/badge.svg)
 [![Go Reference](https://pkg.go.dev/badge/github.com/PlatypusBytes/GoTrain.svg)](https://pkg.go.dev/github.com/PlatypusBytes/GoTrain)
 [![codecov](https://codecov.io/gh/PlatypusBytes/GoTrain/graph/badge.svg)](https://codecov.io/gh/PlatypusBytes/GoTrain)
 [![Go Report Card](https://goreportcard.com/badge/github.com/PlatypusBytes/GoTrain)](https://goreportcard.com/report/github.com/PlatypusBytes/GoTrain)

@@ -1,4 +1,4 @@
-# .github/workflows/go.yml
+# .github/workflows/tests.yml
 
 name: Go Tests
 
