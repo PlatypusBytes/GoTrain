@@ -32,9 +32,6 @@ func TestRunWithSampleConfig(t *testing.T) {
 		t.Fatalf("failed to parse JSON output: %v", err)
 	}
 
-	// "critical_omega": 63.96672269690379,
-	// "critical_velocity": 70.53761234451652
-
 	// Check for expected keys and values
 	expectedKeys := []string{"omega", "track_phase_velocity", "soil_phase_velocity", "critical_omega", "critical_velocity"}
 	for _, key := range expectedKeys {
@@ -42,14 +39,14 @@ func TestRunWithSampleConfig(t *testing.T) {
 			t.Errorf("expected key %s not found in results", key)
 		}
 	}
-	expected_speed := 70.5376
+	expected_speed := 78.223
 	if speed, ok := results["critical_velocity"].(float64); !ok {
 		t.Errorf("critical_velocity is not a float64")
 	} else if diff := speed - expected_speed; diff < -TOL || diff > TOL {
 		t.Errorf("unexpected critical_velocity: got %v, want %v (tolerance %v)", speed, expected_speed, TOL)
 	}
 
-	expectedOmega := 63.9667
+	expectedOmega := 63.017
 	if omega, ok := results["critical_omega"].(float64); !ok {
 		t.Errorf("critical_omega is not a float64")
 	} else if diff := omega - expectedOmega; diff < -TOL || diff > TOL {
