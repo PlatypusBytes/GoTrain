@@ -91,19 +91,6 @@ Download the latest release for your platform from the [GitHub Releases page](ht
 - Linux (amd64)
 - Windows (amd64)
 
-**Installation steps:**
-
-```bash
-# Example for Linux amd64
-wget https://github.com/PlatypusBytes/GoTrain/releases/latest/download/gotrain-linux-amd64.tar.gz
-tar -xzf gotrain-linux-amd64.tar.gz
-cd gotrain
-
-# The executables are ready to use
-./critical_speed -config configs/sample_config.yaml
-./runner -dir testdata/batch -workers 4
-```
-
 ### Option 2: Build from Source
 
 **Prerequisites:**
