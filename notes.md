@@ -39,4 +39,8 @@ To trigger a new documentation build on pkg.go.dev, you can use the following co
 go get github.com/PlatypusBytes/GoTrain@v1.1.1
 ```
 
+You can also use the following URL to trigger a new documentation build on pkg.go.dev:
+
+`https://proxy.golang.org/github.com/%21platypus%21bytes/%21go%21train/@v/v1.1.1.info`
+
 Make sure to replace `v1.1.1` with the desired version tag.
