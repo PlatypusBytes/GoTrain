@@ -29,3 +29,14 @@ make build
 - `make build`: Builds the project and creates the binary in the `bin/` directory.
 - `make test`: Runs the tests.
 
+
+
+# Add the package to pkg.go.dev
+
+To trigger a new documentation build on pkg.go.dev, you can use the following command:
+
+```bash
+go get github.com/PlatypusBytes/GoTrain@v1.1.1
+```
+
+Make sure to replace `v1.1.1` with the desired version tag.
