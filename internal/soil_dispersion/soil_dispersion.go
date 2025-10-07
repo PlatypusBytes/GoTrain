@@ -71,8 +71,8 @@ func SoilDispersion(layers []Layer, omega []float64) []float64 {
 		// Initialize with nan
 		phase_speed[i] = math.NaN()
 
+		d_1 := dispersionFastDelta(layers, omega[i], c_list[0])
 		for j := range len(c_list) - 1 {
-			d_1 := dispersionFastDelta(layers, omega[i], c_list[j])
 			d_2 := dispersionFastDelta(layers, omega[i], c_list[j+1])
 			if d_1*d_2 < 0 {
 				// When solution is found, create a value and set it
@@ -80,6 +80,7 @@ func SoilDispersion(layers []Layer, omega []float64) []float64 {
 				phase_speed[i] = value
 				break
 			}
+			d_1 = d_2
 		}
 	}
 	return phase_speed
