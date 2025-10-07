@@ -5,7 +5,7 @@ import (
 	"log"
 	"runtime"
 
-	"github.com/PlatypusBytes/GoTrain/internal/runner"
+	runner "github.com/PlatypusBytes/GoTrain/internal/runner"
 )
 
 func main() {

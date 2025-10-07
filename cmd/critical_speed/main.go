@@ -17,7 +17,7 @@ import (
 	"flag"
 	"log"
 
-	"github.com/PlatypusBytes/GoTrain/internal/critical_speed"
+	critical_speed "github.com/PlatypusBytes/GoTrain/internal/critical_speed"
 )
 
 // main is the entry point for the critical speed analysis application.
