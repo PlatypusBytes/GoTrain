@@ -37,7 +37,7 @@ func main() {
 		log.Fatal("Error: You must provide a configuration file path using -config")
 	}
 
-	if err := critical_speed.Run(*configPath); err != nil {
+	if err := critical_speed.Run(*configPath, true); err != nil {
 		log.Fatal(err)
 	}
 }

@@ -26,7 +26,7 @@ func worker(id int, jobs <-chan Job, wg *sync.WaitGroup, processedCount *atomic.
 	for job := range jobs {
 
 		// Execute the critical_speed with the YAML file
-		if err := critical_speed.Run(job.path); err != nil {
+		if err := critical_speed.Run(job.path, false); err != nil {
 			log.Printf("Worker %d: Failed on config %s: %v\n", id, job.path, err)
 		}
 

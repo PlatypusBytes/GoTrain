@@ -15,7 +15,7 @@ func TestRunWithSampleConfig(t *testing.T) {
 	tmpFile := filepath.Join("dispersion_results.json")
 	configPath := "../../testdata/sample_config.yaml"
 
-	err := Run(configPath)
+	err := Run(configPath, false)
 	if err != nil {
 		t.Fatalf("Run failed: %v", err)
 	}
