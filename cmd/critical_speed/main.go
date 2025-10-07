@@ -17,7 +17,7 @@ import (
 	"flag"
 	"log"
 
-	"github.com/PlatypusBytes/GoTrain/internal/critical_speed"
+	critical_speed "github.com/PlatypusBytes/GoTrain/internal/critical_speed"
 )
 
 // main is the entry point for the critical speed analysis application.
@@ -37,7 +37,7 @@ func main() {
 		log.Fatal("Error: You must provide a configuration file path using -config")
 	}
 
-	if err := critical_speed.Run(*configPath); err != nil {
+	if err := critical_speed.Run(*configPath, true); err != nil {
 		log.Fatal(err)
 	}
 }

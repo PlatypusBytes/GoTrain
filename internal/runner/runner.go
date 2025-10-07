@@ -20,13 +20,23 @@ type Job struct {
 }
 
 // worker processes jobs from the jobs channel concurrently.
+// It continuously reads Job items from the jobs channel, executes the critical_speed
+// analyzer on each configuration file, and increments the processed count.
+// If an error occurs during processing, it logs the error but continues with the next job.
+// The worker signals completion to the WaitGroup when the jobs channel is closed.
+//
+// Parameters:
+//   - id: Unique identifier for the worker goroutine (used in error logging)
+//   - jobs: Receive-only channel from which Job items are read for processing
+//   - wg: WaitGroup used to signal when the worker has completed all jobs
+//   - processedCount: Atomic counter incremented for each successfully processed job
 func worker(id int, jobs <-chan Job, wg *sync.WaitGroup, processedCount *atomic.Int64) {
 	defer wg.Done()
 
 	for job := range jobs {
 
 		// Execute the critical_speed with the YAML file
-		if err := critical_speed.Run(job.path); err != nil {
+		if err := critical_speed.Run(job.path, false); err != nil {
 			log.Printf("Worker %d: Failed on config %s: %v\n", id, job.path, err)
 		}
 
@@ -35,6 +45,15 @@ func worker(id int, jobs <-chan Job, wg *sync.WaitGroup, processedCount *atomic.
 }
 
 // reportProgress prints the current processing progress with a visual progress bar.
+// It runs in a separate goroutine and updates the console every second with a progress bar
+// showing the percentage of completed jobs. The progress bar has a fixed width of 50 characters
+// and displays both percentage completion and absolute counts (processed/total).
+// The function terminates when a signal is received on the done channel.
+//
+// Parameters:
+//   - processed: Atomic counter tracking the number of processed jobs (read concurrently)
+//   - total: Total number of jobs to be processed
+//   - done: Receive-only channel that signals when progress reporting should stop
 func reportProgress(processed *atomic.Int64, total int64, done <-chan struct{}) {
 	ticker := time.NewTicker(1 * time.Second)
 	defer ticker.Stop()

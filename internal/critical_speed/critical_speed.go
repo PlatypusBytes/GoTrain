@@ -203,8 +203,6 @@ func loadConfig(configPath string) (Config, error) {
 
 	// Read the configuration file
 	data, err := os.ReadFile(configPath)
-	dir, _ := os.Getwd()
-	log.Printf("current directory: %v", dir)
 	if err != nil {
 		return config, fmt.Errorf("failed to read config file: %v", err)
 	}
@@ -228,15 +226,16 @@ func loadConfig(configPath string) (Config, error) {
 //
 // Parameters:
 //   - configPath: Path to the YAML configuration file
+//   - verbose: If true, prints detailed logs during execution
 //
 // Returns:
 //   - error: An error if any step of the process fails
-func Run(configPath string) error {
+func Run(configPath string, verbose bool) error {
 
 	// Load configuration
 	config, err := loadConfig(configPath)
 	if err != nil {
-		log.Fatalf("Error loading configuration: %v", err)
+		return fmt.Errorf("error loading configuration: %v", err)
 	}
 
 	// Create omega values based on configuration file
@@ -254,7 +253,7 @@ func Run(configPath string) error {
 	case "slabtrack":
 		params = createSlabTrackParams(config)
 	default:
-		log.Fatalf("Invalid track type: %s. Supported types are 'ballast' or 'slabtrack'", config.TrackType)
+		return fmt.Errorf("invalid track type: %s. Supported types are 'ballast' or 'slabtrack'", config.TrackType)
 	}
 
 	// Calculate the dispersion curve for the track
@@ -269,14 +268,16 @@ func Run(configPath string) error {
 	// Compute the critical train speed
 	omegaCrit, phaseVelocityCrit, err := math_utils.InterceptLines(omega, phaseVelocity, soilPhaseVelocity)
 	if err != nil {
-		log.Fatalf("Error calculating critical speed. %v", err)
+		return fmt.Errorf("error calculating critical speed. %v", err)
 	}
 
 	// Save results to file
 	err = saveResults(omega, phaseVelocity, soilPhaseVelocity, omegaCrit, phaseVelocityCrit, config.Output.FileName)
 	if err != nil {
-		log.Fatalf("Error saving results: %v", err)
+		return fmt.Errorf("error saving results: %v", err)
 	}
-	fmt.Printf("Results written successfully to %s\n", config.Output.FileName)
+	if verbose {
+		fmt.Printf("Results written successfully to %s\n", config.Output.FileName)
+	}
 	return nil
 }
