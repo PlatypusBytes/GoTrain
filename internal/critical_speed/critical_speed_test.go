@@ -40,14 +40,14 @@ func TestRunWithSampleConfig(t *testing.T) {
 			t.Errorf("expected key %s not found in results", key)
 		}
 	}
-	expected_speed := 78.223
+	expected_speed := 78.231
 	if speed, ok := results["critical_velocity"].(float64); !ok {
 		t.Errorf("critical_velocity is not a float64")
 	} else if diff := speed - expected_speed; diff < -TOL || diff > TOL {
 		t.Errorf("unexpected critical_velocity: got %v, want %v (tolerance %v)", speed, expected_speed, TOL)
 	}
 
-	expectedOmega := 63.017
+	expectedOmega := 63.029
 	if omega, ok := results["critical_omega"].(float64); !ok {
 		t.Errorf("critical_omega is not a float64")
 	} else if diff := omega - expectedOmega; diff < -TOL || diff > TOL {

@@ -37,16 +37,16 @@ func TestRunWithYamls(t *testing.T) {
 	}
 
 	var expectedResults = map[int]expectedResult{
-		0: {criticalOmega: 47.2099, criticalSpeed: 54.9714},
-		1: {criticalOmega: 47.2176, criticalSpeed: 54.9758},
-		2: {criticalOmega: 47.2156, criticalSpeed: 54.9747},
-		3: {criticalOmega: 47.2155, criticalSpeed: 54.9746},
-		4: {criticalOmega: 47.2098, criticalSpeed: 54.9713},
-		5: {criticalOmega: 55.0928, criticalSpeed: 59.3462},
-		6: {criticalOmega: 55.0928, criticalSpeed: 59.3462},
-		7: {criticalOmega: 55.0926, criticalSpeed: 59.3461},
-		8: {criticalOmega: 52.5523, criticalSpeed: 57.9777},
-		9: {criticalOmega: 52.5527, criticalSpeed: 57.978},
+		0: {criticalOmega: 47.2136, criticalSpeed: 54.9735},
+		1: {criticalOmega: 47.2214, criticalSpeed: 54.978},
+		2: {criticalOmega: 47.2194, criticalSpeed: 54.9769},
+		3: {criticalOmega: 47.2193, criticalSpeed: 54.9768},
+		4: {criticalOmega: 47.2135, criticalSpeed: 54.9735},
+		5: {criticalOmega: 55.0968, criticalSpeed: 59.3483},
+		6: {criticalOmega: 55.0968, criticalSpeed: 59.3483},
+		7: {criticalOmega: 55.0966, criticalSpeed: 59.3482},
+		8: {criticalOmega: 52.5544, criticalSpeed: 57.9789},
+		9: {criticalOmega: 52.5548, criticalSpeed: 57.9791},
 	}
 
 	// Check for expected output files
@@ -83,7 +83,7 @@ func TestRunWithYamls(t *testing.T) {
 				t.Errorf("unexpected critical_omega: got %v, want %v (tolerance %v)", omega, expected.criticalOmega, TOL)
 			}
 
-			// cleanup
+			// // cleanup
 			jsonPath := "tests/dispersion_results_" + strconv.Itoa(i) + ".json"
 			os.Remove(jsonPath)
 

@@ -238,6 +238,7 @@ func Run(configPath string, verbose bool) error {
 		return fmt.Errorf("error loading configuration: %v", err)
 	}
 
+	fmt.Printf("\nPATH for file %s\n", configPath)
 	// Create omega values based on configuration file
 	omega := math_utils.Linspace(
 		config.Frequency.Min,
