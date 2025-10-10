@@ -96,7 +96,7 @@
 //	import "github.com/PlatypusBytes/GoTrain/internal/critical_speed"
 //
 //	func main() {
-//		err := critical_speed.Run("configs/my_config.yaml")
+//		err := critical_speed.Run("configs/my_config.yaml", true)
 //		if err != nil {
 //			log.Fatal(err)
 //		}
