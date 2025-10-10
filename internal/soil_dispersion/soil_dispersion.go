@@ -76,7 +76,7 @@ func SoilDispersion(layers []Layer, omega []float64) []float64 {
 			d_2 := dispersionFastDelta(layers, omega[i], c_list[j+1])
 			if d_1*d_2 < 0 {
 				// When solution is found, create a value and set it
-				value := (c_list[j-1] + c_list[j]) / 2
+				value := (c_list[j] + c_list[j+1]) / 2
 				phase_speed[i] = value
 				break
 			}
