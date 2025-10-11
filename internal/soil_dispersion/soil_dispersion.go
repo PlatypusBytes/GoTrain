@@ -173,9 +173,7 @@ func dispersionFastDelta(layers []Layer, omega float64, c float64) float64 {
 	}
 
 	// Calculate determinant using complex values
-	r_h_cmplx := r_h //complex(r_h, 0)
-	s_h_cmplx := s_h //complex(s_h, 0)
-	D := X1[1] + s_h_cmplx*X1[2] - r_h_cmplx*(X1[3]+s_h_cmplx*X1[4])
+	D := X1[1] + s_h*X1[2] - r_h*(X1[3]+s_h*X1[4])
 
 	// Return the real part as the result
 	return real(D)
@@ -190,7 +188,7 @@ func dispersionFastDelta(layers []Layer, omega float64, c float64) float64 {
 //   - c: Compressional wave speed [m/s]
 //   - wavenumber: Wavenumber [1/m]
 //   - thickness: Thickness of the layer [m]
-//   - compressionalWave: Compressional wave speed of the layer [m/s]
+//   - compressionalWaveSpeed: Compressional wave speed of the layer [m/s]
 //   - shearWaveSpeed: Shear wave speed of the layer [m/s]
 //
 // Returns:
@@ -200,23 +198,19 @@ func dispersionFastDelta(layers []Layer, omega float64, c float64) float64 {
 //   - S_beta: Complex term for S-wave
 //   - r: Real term for P-wave
 //   - s: Real term for S-wave
-func computeTerms(c float64, wavenumber float64, thickness float64, compressionalWave float64, shearWaveSpeed float64) (complex128, complex128, complex128, complex128, complex128, complex128) {
+func computeTerms(c float64, wavenumber float64, thickness float64, compressionalWaveSpeed float64, shearWaveSpeed float64) (complex128, complex128, complex128, complex128, complex128, complex128) {
 
-	var r, s complex128
-	var C_alpha, C_beta complex128
-	var S_alpha, S_beta complex128
-
-	r = cmplx.Sqrt(complex((1 - math.Pow(c/compressionalWave, 2)), 0))
-	s = cmplx.Sqrt(complex((1 - math.Pow(c/shearWaveSpeed, 2)), 0))
+	r := cmplx.Sqrt(complex((1 - math.Pow(c/compressionalWaveSpeed, 2)), 0))
+	s := cmplx.Sqrt(complex((1 - math.Pow(c/shearWaveSpeed, 2)), 0))
 
 	complex_wavenb := complex(wavenumber, 0)
 	complex_thickness := complex(thickness, 0)
 
-	C_alpha = cmplx.Cosh(complex_wavenb * r * complex_thickness)
-	S_alpha = cmplx.Sinh(complex_wavenb * r * complex_thickness)
+	C_alpha := cmplx.Cosh(complex_wavenb * r * complex_thickness)
+	S_alpha := cmplx.Sinh(complex_wavenb * r * complex_thickness)
 
-	C_beta = cmplx.Cosh(complex_wavenb * s * complex_thickness)
-	S_beta = cmplx.Sinh(complex_wavenb * s * complex_thickness)
+	C_beta := cmplx.Cosh(complex_wavenb * s * complex_thickness)
+	S_beta := cmplx.Sinh(complex_wavenb * s * complex_thickness)
 
 	return C_alpha, S_alpha, C_beta, S_beta, r, s
 }
