@@ -104,19 +104,19 @@ GoTrain implements analytical models subject to the following assumptions:
 GoTrain allows users to compute the critical train speed for railway tracks supported on layered soil profiles.
 Key functionalities include:
 
-- Railway ballast and slab track configurations;
+- railway ballast and slab track configurations;
 
-- Layered soils;
+- layered soils;
 
-- Command-line interface for easy execution of analyses and integration with other tools;
+- command-line interface for easy execution of analyses and integration with other tools;
 
-- Parallel processing capabilities to handle multiple analyses concurrently, ideal for stochastic studies;
+- parallel processing capabilities to handle multiple analyses concurrently, ideal for stochastic studies;
 
-- Output results in JSON format.
+- output results in JSON format.
 
 
 # Usage
-GoTrain can be installed from pre-built binaries available at the [GitHub releases page](https://github.com/PlatypusBytes/GoTrain/releases), or it can be built from source following the instructions in the [Readme file](https://github.com/PlatypusBytes/GoTrain/blob/main/ReadMe.md).
+GoTrain can be installed from pre-built binaries available at the [GitHub releases page](https://github.com/PlatypusBytes/GoTrain/releases), or it can be built from source following the instructions in the [ReadMe file](https://github.com/PlatypusBytes/GoTrain/blob/main/ReadMe.md).
 
 Two applications are available in GoTrain:
 
@@ -140,40 +140,40 @@ frequency:
 
 # Ballast track parameters (used if track_type is "ballast")
 ballast_track:
-  EI_rail: 6.4e6         # Rail bending stiffness [N·m^2]
-  m_rail: 60.21          # Rail mass per unit length [kg/m]
-  k_rail_pad: 6e8        # Railpad stiffness [N/m]
-  c_rail_pad: 2.5e5      # Railpad damping [N·s/m]
-  m_sleeper: 238.5       # Sleeper (distributed) mass [kg/m]
-  E_ballast: 100e6       # Young's modulus of ballast [Pa]
-  h_ballast: 0.3         # Ballast (layer) thickness [m]
-  width_sleeper: 1.25    # Half-track width [m]
-  rho_ballast: 2000      # Ballast density [kg/m^3]
-  soil_stiffness: 0.0    # Soil (spring) stiffness [N/m]
+  EI_rail: 6.4e6          # Rail bending stiffness [N·m^2]
+  m_rail: 60.21           # Rail mass per unit length [kg/m]
+  k_rail_pad: 6e8         # Railpad stiffness [N/m]
+  c_rail_pad: 2.5e5       # Railpad damping [N·s/m]
+  m_sleeper: 238.5        # Sleeper (distributed) mass [kg/m]
+  E_ballast: 100e6        # Young's modulus of ballast [Pa]
+  h_ballast: 0.3          # Ballast (layer) thickness [m]
+  width_sleeper: 1.25     # Half-track width [m]
+  rho_ballast: 2000       # Ballast density [kg/m^3]
+  soil_stiffness: 0.0     # Soil (spring) stiffness [N/m]
 
 # Slab track parameters (used if track_type is "slabtrack")
 slab_track:
-  EI_rail: 1.29e7        # Rail bending stiffness [N·m^2]
-  m_rail: 120            # Rail mass per unit length [kg/m]
-  EI_slab: 6.40625e8     # Slab bending stiffness [N·m^2] (calculated from 30e9 * (1.25 * 0.35^3 / 12))
-  m_slab: 1093.75        # Slab mass per unit length [kg/m] (calculated from 2500*1.25*0.35)
-  k_rail_pad: 5e8        # Railpad stiffness [N/m]
-  c_rail_pad: 2.5e5      # Railpad damping [N·s/m]
-  soil_stiffness: 0.0    # Soil (spring) stiffness [N/m]
+  EI_rail: 1.29e7         # Rail bending stiffness [N·m^2]
+  m_rail: 120             # Rail mass per unit length [kg/m]
+  EI_slab: 600e6          # Slab bending stiffness [N·m^2]
+  m_slab: 1093.75         # Slab mass per unit length [kg/m]
+  k_rail_pad: 5e8         # Railpad stiffness [N/m]
+  c_rail_pad: 2.5e5       # Railpad damping [N·s/m]
+  soil_stiffness: 0.0     # Soil (spring) stiffness [N/m]
 
 soil_layers:
   - thickness: 5          # Thickness of the soil layer [m]
     density: 1900         # Density of the soil layer [kg/m^3]
-    young_modulus: 2.67e7 # Young  modulus of the soil layer [Pa]
-    poisson_ratio: 0.33   # Poisson's ratio of the soil layer
+    young_modulus: 2.6e7  # Young  modulus of the soil layer [Pa]
+    poisson_ratio: 0.30   # Poisson's ratio of the soil layer
   - thickness: 10         # Thickness of the second soil layer [m]
     density: 1900         # Density of the second soil layer [kg/m^3]
-    young_modulus: 1.14e8 # Young  modulus of the second soil layer [Pa]
-    poisson_ratio: 0.33   # Poisson's ratio of the second soil layer
+    young_modulus: 1.1e8  # Young  modulus of the second soil layer [Pa]
+    poisson_ratio: 0.25   # Poisson's ratio of the second soil layer
   - thickness: .inf       # Thickness of the fourth soil layer [m]
     density: 1900         # Density of the fourth soil layer [kg/m^3]
-    young_modulus: 4.71e8 # Young  modulus of the fourth soil layer [Pa]
-    poisson_ratio: 0.33   # Poisson's ratio of the fourth soil layer
+    young_modulus: 4.7e8  # Young  modulus of the fourth soil layer [Pa]
+    poisson_ratio: 0.30   # Poisson's ratio of the fourth soil layer
 
 # Output file configuration
 output:
@@ -183,16 +183,19 @@ output:
 The output of GoTrain is a JSON file containing the computed dispersion curves for soil and track and the critical speed.
 
 
-## Example: critical_speed
-Analyzes a single railway configuration and computes dispersion curves and critical speed.
+## Example: `critical_speed`
+
+Analyses a single railway configuration and computes dispersion curves and critical speed. The -config flag specifies the path to the YAML configuration file.
 
 Usage:
 ```bash
 ./critical_speed -config <YAML configuration file>
 ```
 
-## Example: runner
-Processes multiple YAML configuration files in parallel with configurable worker pools. Automatically discovers all YAML files in the directory tree and processes them concurrently.
+
+## Example: `runner`
+
+Processes multiple YAML configuration files in parallel with configurable worker pools. Automatically discovers all YAML files in the directory tree and processes them concurrently. The -dir flag specifies the directory to search for YAML files, and the -workers flag sets the number of concurrent workers.
 
 Usage:
 ```bash
