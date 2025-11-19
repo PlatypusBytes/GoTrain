@@ -46,7 +46,7 @@ GoTrain implements semi-analytical models for evaluating track and soil dispersi
 
 The railway track is modelled as a continuous, infinite Euler-Bernoulli beam subjected to vertical dynamic loading and supported by discrete elements such as sleepers, railpads, and ballast, which rest on a layered soil profile.
 
-Under vertical harmonic excitation in the frequency–wavenumber domain, the governing equation can be written in matrix form as in Equation \autoref{eq:track}:
+Under vertical harmonic excitation in the frequency–wavenumber domain, the governing equation can be written in matrix form as in \autoref{eq:track}:
 
 \begin{equation}
   \mathbf{K}(k, \omega)\, \mathbf{u}(k, \omega) = \mathbf{P}(k, \omega),
@@ -57,7 +57,7 @@ Under vertical harmonic excitation in the frequency–wavenumber domain, the gov
 where $k$ is the wavenumber, $\omega$ is the angular frequency, $\mathbf{u}$ the vertical displacement, $\mathbf{P}$ the vertical force and $\mathbf{K}$ represents the dynamic stiffness matrix of the track system, which is available in either ballast or slab track configurations.
 These configurations differ in the way the rail is supported: ballast track uses discrete railpads, sleepers, and a ballast layer, while in slab track the rail is directly supported by discrete railpads on a concrete slab.
 
-The track dispersion relation is obtained by solving Equation \autoref{eq:det_track} for all frequencies $\omega$ of interest.
+The track dispersion relation is obtained by solving \autoref{eq:det_track} for all frequencies $\omega$ of interest.
 
 \begin{equation}
   \det\left|\mathbf{K}(k,\omega)\right| = 0.
@@ -73,13 +73,16 @@ each layer. GoTrain computes Rayleigh wave dispersion using the Fast Delta
 Matrix Method [@buchen1996]. This method refines the classical Thomson–Haskell formulation by addressing numerical instabilities that occur at high frequencies, particularly when dealing with thin layers or stiff contrasts. The Rayleigh-wave dispersion function $D$ follows \autoref{eq:soil}:
 
 \begin{equation}
-   D(c, \omega) = \det\left|\mathbf{U^{T}} \mathbf{T} \mathbf{V} \right| = 0,
+   D(c, \omega) = \det\left|\mathbf{U^{\top}} \mathbf{T} \mathbf{V} \right| = 0,
   \label{eq:soil}
 \end{equation}
 
 where:
-- $c = \omega / k$ is the Rayleigh-wave phase velocity,
-- $\mathbf{T}$ is the full propagator matrix (product of individual layer transfer matrices),
+
+- $c = \omega / k$ is the Rayleigh-wave phase velocity;
+
+- $\mathbf{T}$ is the full propagator matrix (product of individual layer transfer matrices);
+
 - $\mathbf{U}$, $\mathbf{V}$ are boundary condition matrices (defined by free surface and radiation conditions).
 
 The Fast Delta Matrix Method reformulates this using compound matrices (delta matrices), which eliminates numerical overflow and underflow issues by expressing the system in terms of second-order minors. This ensures stable and efficient computation of dispersion curves across a wide frequency range.
