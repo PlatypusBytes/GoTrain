@@ -1,0 +1,23 @@
+{
+  "@context": "https://raw.githubusercontent.com/codemeta/codemeta/master/codemeta.jsonld",
+  "@type": "Code",
+  "author": [
+    {
+      "@id": "http://orcid.org/0000-0002-9896-3248",
+      "@type": "Person",
+      "email": "bruno.zuadacoelho@deltares.nl",
+      "name": "brunozc",
+      "affiliation": "Deltares"
+    }
+  ],
+  "identifier": "",
+  "codeRepository": "https://github.com/PlatypusBytes/GoTrain/",
+  "datePublished": "2025-11-18",
+  "dateModified": "2025-11-18",
+  "dateCreated": "2025-11-18",
+  "description": "Critical train speed",
+  "keywords": "Go, railways, soil dynamics",
+  "license": "BSD",
+  "title": "GoTrain",
+  "version": "1.1.3"
+}
