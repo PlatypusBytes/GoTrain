@@ -8,7 +8,6 @@ authors:
   - name: B. Zuada Coelho
     orcid: 0000-0002-9896-3248
     corresponding: true
-    equal-contrib: true
     affiliation: 1
 affiliations:
  - name: Deltares, The Netherlands
