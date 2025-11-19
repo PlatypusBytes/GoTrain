@@ -89,9 +89,13 @@ The Fast Delta Matrix Method reformulates this using compound matrices (delta ma
 ## Model assumptions
 
 GoTrain implements analytical models subject to the following assumptions:
+
 - the track and soil are modelled as uncoupled subsystems;
+
 - soil and track components behave as linear elastic materials;
+
 - soil layers are horizontally infinite and laterally homogeneous;
+
 - nonlinear effects, such as soil plasticity or track degradation, are not considered.
 
 
@@ -99,10 +103,15 @@ GoTrain implements analytical models subject to the following assumptions:
 
 GoTrain allows users to compute the critical train speed for railway tracks supported on layered soil profiles.
 Key functionalities include:
-- Railway ballast and slab track configurations,
-- Layered soils,
-- Command-line interface for easy execution of analyses and integration with other tools,
-- Parallel processing capabilities to handle multiple analyses concurrently, ideal for stochastic studies,
+
+- Railway ballast and slab track configurations;
+
+- Layered soils;
+
+- Command-line interface for easy execution of analyses and integration with other tools;
+
+- Parallel processing capabilities to handle multiple analyses concurrently, ideal for stochastic studies;
+
 - Output results in JSON format.
 
 
@@ -110,12 +119,14 @@ Key functionalities include:
 GoTrain can be installed from pre-built binaries available at the [GitHub releases page](https://github.com/PlatypusBytes/GoTrain/releases), or it can be built from source following the instructions in the [Readme file](https://github.com/PlatypusBytes/GoTrain/blob/main/ReadMe.md).
 
 Two applications are available in GoTrain:
-- `critical_speed`: runs one realisation of GoTrain
-- `runner`: runs GoTrain in parallel for multiple realisations (ideal for stochastic analysis)
+
+- `critical_speed`: runs one realisation of GoTrain;
+
+- `runner`: runs GoTrain in parallel for multiple realisations (ideal for stochastic analysis).
 
 To run GoTrain the user needs to prepare an input configuration file containing the information about the track and soil properties.
-This is done by means of a [YAML format](https://github.com/PlatypusBytes/GoTrain/blob/main/configs/sample_config.yaml). An example configuration file is shown below:
-
+This is done by means of a [YAML format](https://github.com/PlatypusBytes/GoTrain/blob/main/configs/sample_config.yaml).
+An example configuration file is shown below:
 
 ```YAML
 # Track type: can be "ballast" or "slabtrack"
@@ -159,10 +170,6 @@ soil_layers:
     density: 1900         # Density of the second soil layer [kg/m^3]
     young_modulus: 1.14e8 # Young  modulus of the second soil layer [Pa]
     poisson_ratio: 0.33   # Poisson's ratio of the second soil layer
-  - thickness: 15         # Thickness of the third soil layer [m]
-    density: 1900         # Density of the third soil layer [kg/m^3]
-    young_modulus: 2.63e8 # Young  modulus of the third soil layer [Pa]
-    poisson_ratio: 0.33   # Poisson's ratio of the third soil layer
   - thickness: .inf       # Thickness of the fourth soil layer [m]
     density: 1900         # Density of the fourth soil layer [kg/m^3]
     young_modulus: 4.71e8 # Young  modulus of the fourth soil layer [Pa]
