@@ -298,9 +298,3 @@ See the [AUTHORS](AUTHORS) file for the list of contributors.
 ## License
 
 This project is licensed under the BSD-3-Clause License. See the [LICENSE](LICENSE) file for details.
-
-## Project Links
-
-- GitHub Repository: [https://github.com/PlatypusBytes/GoTrain](https://github.com/PlatypusBytes/GoTrain)
-- Package Documentation: [https://pkg.go.dev/github.com/PlatypusBytes/GoTrain](https://pkg.go.dev/github.com/PlatypusBytes/GoTrain)
-- Original Python Version: [TrainCritSpeed](https://github.com/PlatypusBytes/TrainCritSpeed)
