@@ -3,6 +3,8 @@
 [![codecov](https://codecov.io/gh/PlatypusBytes/GoTrain/graph/badge.svg)](https://codecov.io/gh/PlatypusBytes/GoTrain)
 [![Go Report Card](https://goreportcard.com/badge/github.com/PlatypusBytes/GoTrain)](https://goreportcard.com/report/github.com/PlatypusBytes/GoTrain)
 [![License](https://img.shields.io/badge/License-BSD_3--Clause-blue.svg)](https://opensource.org/licenses/BSD-3-Clause)
+[![DOI](https://zenodo.org/badge/993186160.svg)](https://doi.org/10.5281/zenodo.18744754)
+
 
 # GoTrain
 
